@@ -15,16 +15,60 @@
   --light__2: #e8ebec;
   --light__3: hsl(226, 9%, 70%);
   --light__4: #6c7181;
+  --dark__1__alpha: hsla(240, 2%, 32%, 0.2);
   --primary__1: #e62834;
   --primary__2: #aa3434;
 }
-#root {
-  min-height: 100vh;
+/* #root {
+  height: 100vh;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr 90px;
   place-items: center;
-}
+  overflow: hidden;
+} */
 body {
   font-family: 'Nunito', sans-serif;
   background-color: var(--background__1);
+  font-size: 18px;
+}
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+}
+@media (max-width: 500px) {
+  body {
+    font-size: 14px;
+  }
+}
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+/* Customize scrollbar track */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Customize scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  transition: background-color 0.2s linear;
+}
+
+/* Customize scrollbar track on hover */
+::-webkit-scrollbar:hover {
+  width: 15px;
+  height: 15px;
+}
+
+/* Customize scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  transition: background-color 0.2s linear;
+
+  background-color: hsl(224, 23%, 24%);
 }

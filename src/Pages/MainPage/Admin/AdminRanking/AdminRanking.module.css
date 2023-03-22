@@ -1,0 +1,24 @@
+.container {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr 90px;
+  place-items: center;
+  overflow: hidden;
+}
+
+.rankings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 50px;
+
+  margin-top: 3em;
+  margin-bottom: 100px;
+}
+@media (max-width: 1150px) {
+  .rankings {
+    flex-direction: column;
+  }
+}

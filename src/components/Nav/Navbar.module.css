@@ -1,50 +1,23 @@
 .navbar {
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
   background-color: var(--background__2);
   display: grid;
+  /* place-items: center; */
   grid-template-columns: repeat(var(--length), 1fr);
-
-  grid-area: 3;
 
   width: clamp(280px, 380px, 500px);
   border-radius: 9px 9px 0 0;
 
-  box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.2);
 }
 .navbar .navbar--button:not(:last-child) {
   border-right: 2px solid var(--border);
 }
-.navbar--CTA {
-  cursor: pointer;
-  position: absolute;
-  width: 65px;
-  height: 65px;
-  right: 4px;
-  left: 50%;
-  top: -50%;
-  transform: translate(-50%, -50%);
-  border-radius: 9px;
-  border: none;
-  outline: none;
-  background-color: transparent;
-  box-shadow: 0 0 0 4px var(--primary__1);
-  transition: all 0.2s linear;
-}
-.navbar--CTA:hover,
-.navbar--CTA:focus {
-  background-color: var(--primary__1);
-}
-.navbar--CTA:hover svg,
-.navbar--CTA:focus svg {
-  fill: var(--light__2);
-  /* transform: rotate(90deg); */
-}
-.navbar--CTA svg {
-  width: 65%;
-  height: 65%;
-  fill: var(--primary__1);
-  transition: all 0.2s linear;
-}
+
 .navbar--button {
   cursor: pointer;
   display: flex;
@@ -74,8 +47,28 @@
 }
 .navbar--button span {
   color: var(--light__3);
-  font-size: 14px;
+  font-size: 1em;
   letter-spacing: 0.8px;
   font-weight: 500;
   transition: all 0.2s linear;
+}
+
+@media (max-width: 500px) {
+  .navbar--CTA {
+    width: 45px;
+    height: 45px;
+    right: 4px;
+    left: 50%;
+    top: -50%;
+    transform: translate(-50%, -50%);
+  }
+  .navbar--button {
+    gap: 4px;
+    padding: 0 4px;
+    margin: 12px 0;
+  }
+  .navbar--button svg {
+    width: 24px;
+    height: 24px;
+  }
 }

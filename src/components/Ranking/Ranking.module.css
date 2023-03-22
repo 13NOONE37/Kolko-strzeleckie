@@ -1,0 +1,129 @@
+.container {
+  background-color: var(--background__2);
+  border-radius: 9px;
+  border: 2px solid var(--border);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+
+  max-width: 100vw;
+  width: 600px;
+  user-select: none;
+}
+
+.heading {
+  width: 100%;
+  /* display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px; */
+
+  color: var(--light__2);
+  padding: 1em;
+  border-bottom: 2px solid var(--border);
+}
+.heading span {
+  color: #02d0c8;
+  font-size: 1em;
+}
+.ranking {
+  padding: 1em;
+  width: 100%;
+}
+.names {
+  margin: 1em;
+  padding: 0.5em;
+
+  display: grid;
+  grid-template-columns: 5fr 2fr 2fr;
+  width: calc(100% - 2em);
+
+  place-items: center;
+
+  border-radius: 9px;
+  border: 2px solid var(--border);
+}
+@media (max-width: 1150px) {
+  .container {
+    width: clamp(320px, 600px, 90vw);
+  }
+}
+
+.names span {
+  font-size: 1em;
+  font-weight: 500;
+  color: var(--light__2);
+}
+.names span:first-child {
+  /* place-self: start; */
+}
+.record {
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 1fr 4fr 2fr 2fr;
+  place-items: center;
+
+  width: 100%;
+  padding: 1em 8px;
+
+  font-size: 1em;
+  font-weight: 500;
+  color: var(--light__2);
+
+  border: 2px solid transparent;
+  border-radius: 9px;
+  outline: none;
+
+  transition: all 0.1s linear;
+}
+.container > .record:nth-child(2) .place {
+  color: #ffc801;
+}
+.container > .record:nth-child(3) .place {
+  color: #abc0d1;
+}
+.container > .record:nth-child(4) .place {
+  color: #d9975d;
+}
+.record:nth-child(odd) {
+  background-color: var(--background__1);
+}
+.maxscore {
+  color: var(--light__4);
+  font-size: 0.9em;
+}
+.record:last-child {
+  border-bottom: 2px solid var(--border);
+}
+
+.record:hover {
+  color: hsl(178, 80%, 41%);
+}
+.record:focus {
+  /* background-color: var(--background__2); */
+  border-color: var(--border);
+  color: #02d0c8;
+}
+
+.place {
+}
+.name {
+  justify-self: start;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+.firstName {
+}
+.secondName {
+}
+.points {
+}
+.tens {
+}
