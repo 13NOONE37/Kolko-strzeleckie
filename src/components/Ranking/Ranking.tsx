@@ -1,3 +1,4 @@
+import Select from 'components/Select/Select';
 import React, { FC, useEffect, useState } from 'react';
 import styles from './Ranking.module.css';
 
@@ -36,10 +37,7 @@ const RankingPlace: FC<RankingPlaceType> = ({
   );
 };
 
-interface RankingType {
-  text: JSX.Element;
-}
-const Ranking: FC<RankingType> = ({ text }) => {
+const Ranking: FC = () => {
   const [users, setUsers] = useState<UserType[]>([]);
   useEffect(() => {
     //fetch data
@@ -235,7 +233,45 @@ const Ranking: FC<RankingType> = ({ text }) => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>{text}</h2>
+      <div className={styles.heading}>
+        <span className={styles.element}>
+          <h2>Najlepsi w sezonie: </h2>
+          {/* <span className={styles.color}>{'2022/23'}</span> */}
+          <Select
+            placeholder="Sezon"
+            defaultValue={{ label: '2022/23', value: '22/23' }}
+            options={[
+              { label: '2022/23', value: '22/23' },
+              { label: '2021/22', value: '21/22' },
+              { label: '2020/21', value: '20/21' },
+            ]}
+            changeCallback={() => {}}
+            isSearchable={true}
+          />
+        </span>
+        <span className={styles.element}>
+          <h2>Liczba treningów:</h2>
+          {/* <span className={styles.color}>{'4'}</span> */}
+          <Select
+            placeholder="Liczba treningów"
+            defaultValue={{ label: '1', value: 1 }}
+            options={[
+              { label: '1', value: 1 },
+              { label: '2', value: 2 },
+              { label: '3', value: 3 },
+              { label: '4', value: 4 },
+              { label: '5', value: 5 },
+              { label: '6', value: 6 },
+              { label: '7', value: 7 },
+              { label: '8', value: 8 },
+              { label: '9', value: 9 },
+              { label: '10', value: 10 },
+            ]}
+            changeCallback={() => {}}
+            isSearchable={true}
+          />
+        </span>
+      </div>
 
       <div className={styles.names}>
         <span>Uczeń</span>

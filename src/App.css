@@ -16,8 +16,8 @@
   --light__3: hsl(226, 9%, 70%);
   --light__4: #6c7181;
   --dark__1__alpha: hsla(240, 2%, 32%, 0.2);
-  --primary__1: #e62834;
-  --primary__2: #aa3434;
+  --primary__1: #02d0c8; /*#e62834*/
+  --primary__2: #15bcb7; /*#aa3434*/
 }
 /* #root {
   height: 100vh;

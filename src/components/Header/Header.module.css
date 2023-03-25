@@ -66,6 +66,10 @@
 
   white-space: nowrap;
   transition: color 0.1s linear;
+
+  padding: 0.5em;
+  border-radius: 9px;
+  background-color: var(--background__2);
 }
 .header--button:hover,
 .header--button:focus {

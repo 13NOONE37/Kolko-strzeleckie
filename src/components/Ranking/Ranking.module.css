@@ -15,6 +15,9 @@
 
 .heading {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
   /* display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -23,11 +26,22 @@
   color: var(--light__2);
   padding: 1em;
   border-bottom: 2px solid var(--border);
+  font-size: 24px;
+  font-weight: 700;
 }
-.heading span {
-  color: #02d0c8;
-  font-size: 1em;
+
+.element {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5em;
+  align-items: center;
+  font-size: 0.8em;
 }
+
+.element h2 {
+  font-size: 1.2em;
+}
+
 .ranking {
   padding: 1em;
   width: 100%;
@@ -48,6 +62,11 @@
 @media (max-width: 1150px) {
   .container {
     width: clamp(320px, 600px, 90vw);
+  }
+}
+@media (max-width: 768px) {
+  .heading {
+    font-size: 18px;
   }
 }
 
@@ -81,7 +100,7 @@
 
   transition: all 0.1s linear;
 }
-.container > .record:nth-child(2) .place {
+/* .container > .record:nth-child(2) .place {
   color: #ffc801;
 }
 .container > .record:nth-child(3) .place {
@@ -89,7 +108,7 @@
 }
 .container > .record:nth-child(4) .place {
   color: #d9975d;
-}
+} */
 .record:nth-child(odd) {
   background-color: var(--background__1);
 }
@@ -102,12 +121,12 @@
 }
 
 .record:hover {
-  color: hsl(178, 80%, 41%);
+  color: var(--primary__2);
 }
 .record:focus {
   /* background-color: var(--background__2); */
   border-color: var(--border);
-  color: #02d0c8;
+  color: var(--primary__1);
 }
 
 .place {

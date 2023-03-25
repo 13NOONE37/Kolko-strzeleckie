@@ -24,15 +24,26 @@ const Select: FC<SelectProps> = ({
   const [isOpen, setIsOpen] = useState(!false);
   const [highlithedIndex, setHighlithedIndex] = useState(null);
   return (
-    <div style={{ color: 'var(--light__1)', width: width ?? 'auto' }}>
+    <div
+      style={{
+        color: 'var(--light__1)',
+        width: width ?? 'auto',
+      }}
+    >
       <ReactSelect
-        className="marcin"
+        className={'sadf'}
         placeholder={placeholder}
         defaultValue={defaultValue}
         options={options}
         onChange={changeCallback}
         isSearchable={isSearchable}
         noOptionsMessage={() => 'Brak wyników'}
+        styles={{
+          control: (base) => ({
+            ...base,
+            borderWidth: '2px',
+          }),
+        }}
         theme={(theme) => ({
           ...theme,
 
@@ -40,7 +51,7 @@ const Select: FC<SelectProps> = ({
             ...theme.colors,
             neutral0: '#1c2232', //background-color
             neutral20: '#242a3a', //border-color
-            neutral80: '#f6f9f9', //text selected in placeholder
+            neutral80: ' #02d0c8', //text selected in placeholder
             neutral30: 'var(--primary__1)', //hover border
             neutral40: 'var(--light__1)', //icon-hover-color
             neutral50: '#6c7181', //placeholder
