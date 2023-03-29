@@ -36,9 +36,13 @@
 }
 .navbar--button:hover svg,
 .navbar--button:focus svg {
-  fill: var(--primary__1);
+  fill: var(--primary__2);
   transform: translateY(-2px);
 }
+.active svg {
+  fill: var(--primary__1) !important;
+}
+
 .navbar--button svg {
   width: 32px;
   height: 32px;

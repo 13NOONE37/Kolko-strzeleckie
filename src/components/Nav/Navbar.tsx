@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, JSXElementConstructor } from 'react';
+import React, { FC } from 'react';
 import CSSVariablesType from '../../types/CSSVariablesType';
 import styles from './Navbar.module.css';
 
@@ -6,10 +6,19 @@ interface NavbarElementProps {
   name: string;
   Icon: FC;
   callback?: () => void;
+  active: boolean;
 }
-const NavbarElement: FC<NavbarElementProps> = ({ name, Icon, callback }) => {
+const NavbarElement: FC<NavbarElementProps> = ({
+  name,
+  Icon,
+  callback,
+  active,
+}) => {
   return (
-    <button onClick={callback} className={styles['navbar--button']}>
+    <button
+      onClick={callback}
+      className={`${active ? styles.active : ''} ${styles['navbar--button']}`}
+    >
       <Icon />
       <span>{name}</span>
     </button>

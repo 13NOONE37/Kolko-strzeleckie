@@ -1,11 +1,3 @@
-.container {
-  height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr 90px;
-  place-items: center;
-  overflow: hidden;
-}
-
 .rankings {
   display: flex;
   justify-content: center;

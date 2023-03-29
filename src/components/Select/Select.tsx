@@ -8,7 +8,7 @@ type SelectOption = {
 interface SelectProps {
   placeholder: string;
   defaultValue?: SelectOption | undefined;
-  changeCallback: () => void;
+  changeCallback: (data: SelectOption) => void;
   options: SelectOption[];
   isSearchable: boolean;
   width?: string;

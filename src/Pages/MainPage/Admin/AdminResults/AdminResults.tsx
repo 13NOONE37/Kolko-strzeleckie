@@ -1,23 +1,19 @@
-import Header from 'components/Header/Header';
-import AdminNavbar from 'components/Nav/ReadyVariations/AdminNavbar';
-import React, { useContext } from 'react';
-import AppContext from 'store/AppContext';
+import React from 'react';
+
 import styles from './AdminResults.module.css';
 
-import { ReactComponent as Logout } from 'assets/logout.svg';
 import AnimatedPage from 'components/AnimatedPage/AnimatedPage';
+import TrainingResult from 'components/TrainingResult/TrainingResult';
+import Results from 'components/Results/Results';
 
 export default function AdminResults() {
-  const { user } = useContext(AppContext);
   return (
     <AnimatedPage>
-      <div id={styles.container}>
-        <Header
-          text={`${user?.firstName} ${user?.secondName}`}
-          CTA={{ Icon: Logout, text: 'Wyloguj się' }}
-        />
-        <div></div>
-        <AdminNavbar />
+      <div className={styles.container}>
+        <Results />
+        {/* <TrainingResult date={new Date()} points={100} tens={10} />
+        <TrainingResult date={new Date()} points={100} tens={10} />
+        <TrainingResult date={new Date()} points={100} tens={10} /> */}
       </div>
     </AnimatedPage>
   );

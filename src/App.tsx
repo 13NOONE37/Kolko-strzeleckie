@@ -17,6 +17,8 @@ import AppContext from 'store/AppContext';
 import NotFound from 'Pages/NotFound/NotFound';
 import { ROLE } from 'Pages/roles';
 import PrivateRoute from 'Pages/PrivateRoute';
+import { AnimatePresence } from 'framer-motion';
+
 function App() {
   // const [isLogged, setIsLogged] = useState(false);
   // const [user, setUser] = useState(null);
@@ -31,35 +33,45 @@ function App() {
 
   return (
     <AppContext.Provider value={{ isLogged, setIsLogged, user, setUser }}>
-      <Routes>
-        <Route path="*" element={<NotFound />} />
-        {pages.authPages.map((authPage: pageRoleType) => {
-          return (
-            <Route
-              path={authPage.path}
-              element={
-                <PrivateRoute
-                  roles={authPage.roles}
-                  children={authPage.element}
-                />
-              }
-              key={authPage.path}
-            />
-          );
-        })}
-
-        <Route path="/" element={<GuestRoute />}>
-          {pages.guestPages.map((guestPage: pageType, index: number) => {
+      <AnimatePresence mode="wait">
+        <Routes>
+          <Route path="*" element={<NotFound />} />
+          {pages.authPages.map((authPage: pageRoleType) => {
             return (
               <Route
-                path={guestPage.path}
-                element={guestPage.element}
-                key={index}
-              />
+                path={authPage.path}
+                element={
+                  <PrivateRoute
+                    roles={authPage.roles}
+                    children={authPage.element}
+                  />
+                }
+                key={authPage.path}
+              >
+                {authPage.subPages?.map((subPage) => (
+                  <Route
+                    path={subPage.path}
+                    key={subPage.path}
+                    element={subPage.element}
+                  />
+                ))}
+              </Route>
             );
           })}
-        </Route>
-      </Routes>
+
+          <Route path="/" element={<GuestRoute />}>
+            {pages.guestPages.map((guestPage: pageType, index: number) => {
+              return (
+                <Route
+                  path={guestPage.path}
+                  element={guestPage.element}
+                  key={index}
+                />
+              );
+            })}
+          </Route>
+        </Routes>
+      </AnimatePresence>
     </AppContext.Provider>
   );
 }

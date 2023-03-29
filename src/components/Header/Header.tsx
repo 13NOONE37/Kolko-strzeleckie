@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import styles from './Header.module.css';
 
-interface ProgressBarValues {
+export interface ProgressBarValuesInterface {
   steps: number;
   currentStep: number;
   nextStep: () => void;
@@ -10,7 +10,7 @@ interface ProgressBarValues {
 export const useProgressBarValues = (
   steps: number,
   initialStep: number,
-): ProgressBarValues => {
+): ProgressBarValuesInterface => {
   const [currentStep, setCurrentStep] = useState<number>(initialStep);
 
   const handleChangeProgress = useCallback(
@@ -57,15 +57,16 @@ const ProgressBar: FC<ProgressBarProps> = ({ steps, currentStep }) => {
   );
 };
 
-interface HeaderCTAProps {
-  Icon: FC;
+export interface HeaderCTAProps {
+  Icon?: FC;
   text: string;
+  disabled?: boolean;
 }
-const HeaderCTA: FC<HeaderCTAProps> = ({ Icon, text }) => {
+const HeaderCTA: FC<HeaderCTAProps> = ({ Icon, text, disabled }) => {
   return (
-    <button className={styles['header--button']}>
+    <button disabled={disabled} className={`${styles['header--button']}`}>
       {text}
-      <Icon />
+      {Icon && <Icon />}
     </button>
   );
 };
@@ -88,3 +89,4 @@ const Header: FC<HeaderProps> = ({ text, CTA, progressBar, progressProps }) => {
 };
 
 export default Header;
+export { HeaderCTA };

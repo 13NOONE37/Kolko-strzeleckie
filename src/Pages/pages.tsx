@@ -1,7 +1,9 @@
 import LoginPage from 'Pages/LoginPage/LoginPage';
+import AdminContainer from './MainPage/Admin/AdminContainer/AdminContainer';
 import AdminRanking from './MainPage/Admin/AdminRanking/AdminRanking';
 import AdminResults from './MainPage/Admin/AdminResults/AdminResults';
 import AdminTraining from './MainPage/Admin/AdminTraining/AdminTraining';
+import UserContainer from './MainPage/User/UserContainer/UserContainer';
 import UserRanking from './MainPage/User/UserRanking/UserRanking';
 import UserResults from './MainPage/User/userResults/UserResults';
 import { ROLE } from './roles';
@@ -26,30 +28,65 @@ const pages: {
 
   authPages: [
     {
-      path: '/user/ranking',
-      element: <UserRanking />,
+      path: '/user',
+      element: <UserContainer />,
       roles: [ROLE.User],
+      subPages: [
+        {
+          path: '/user/ranking',
+          element: <UserRanking />,
+        },
+        {
+          path: '/user/results',
+          element: <UserResults />,
+        },
+      ],
     },
     {
-      path: '/user/results',
-      element: <UserResults />,
-      roles: [ROLE.User],
-    },
-    {
-      path: '/admin/ranking',
-      element: <AdminRanking />,
+      path: '/admin/',
+      element: <AdminContainer />,
       roles: [ROLE.Admin],
+      subPages: [
+        {
+          path: '/admin/ranking',
+          element: <AdminRanking />,
+        },
+        {
+          path: '/admin/results/:id?',
+          element: <AdminResults />,
+        },
+        {
+          path: '/admin/training',
+          element: <AdminTraining />,
+        },
+      ],
     },
-    {
-      path: '/admin/training',
-      element: <AdminTraining />,
-      roles: [ROLE.Admin],
-    },
-    {
-      path: '/admin/results',
-      element: <AdminResults />,
-      roles: [ROLE.Admin],
-    },
+
+    // {
+    //   path: '/user/ranking',
+    //   element: <UserRanking />,
+    //   roles: [ROLE.User],
+    // },
+    // {
+    //   path: '/user/results',
+    //   element: <UserResults />,
+    //   roles: [ROLE.User],
+    // },
+    // {
+    //   path: '/admin/ranking',
+    //   element: <AdminRanking />,
+    //   roles: [ROLE.Admin],
+    // },
+    // {
+    //   path: '/admin/training',
+    //   element: <AdminTraining />,
+    //   roles: [ROLE.Admin],
+    // },
+    // {
+    //   path: '/admin/results',
+    //   element: <AdminResults />,
+    //   roles: [ROLE.Admin],
+    // },
   ],
 };
 export default pages;
