@@ -61,10 +61,15 @@ export interface HeaderCTAProps {
   Icon?: FC;
   text: string;
   disabled?: boolean;
+  callback?: () => void;
 }
-const HeaderCTA: FC<HeaderCTAProps> = ({ Icon, text, disabled }) => {
+const HeaderCTA: FC<HeaderCTAProps> = ({ Icon, text, disabled, callback }) => {
   return (
-    <button disabled={disabled} className={`${styles['header--button']}`}>
+    <button
+      onClick={callback}
+      disabled={disabled}
+      className={`${styles['header--button']}`}
+    >
       {text}
       {Icon && <Icon />}
     </button>

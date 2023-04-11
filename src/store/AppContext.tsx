@@ -3,6 +3,8 @@ import { createContext } from 'react';
 
 export interface UserType {
   role: ROLE;
+  id: string;
+  email: string;
   firstName: string;
   secondName: string;
 }

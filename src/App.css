@@ -5,6 +5,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Nunito', sans-serif;
 }
 :root {
   --background__1: #0f141e;
@@ -27,7 +28,6 @@
   overflow: hidden;
 } */
 body {
-  font-family: 'Nunito', sans-serif;
   background-color: var(--background__1);
   font-size: 18px;
 }

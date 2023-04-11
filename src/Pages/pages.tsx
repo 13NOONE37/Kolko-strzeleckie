@@ -21,6 +21,10 @@ const pages: {
 } = {
   guestPages: [
     {
+      path: '/',
+      element: <LoginPage />,
+    },
+    {
       path: '/login',
       element: <LoginPage />,
     },

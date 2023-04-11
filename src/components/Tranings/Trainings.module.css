@@ -37,6 +37,25 @@
   align-items: center;
   font-size: 0.8em;
 }
+/* .element button {
+  font-size: 1em;
+  letter-spacing: 0.25px;
+  font-weight: 600;
+  background-color: var(--background__1);
+} */
+.element button {
+  font-size: 1em;
+  letter-spacing: 0.25px;
+  font-weight: 600;
+  background-color: var(--primary__2);
+  color: var(--background__1);
+}
+.element button:hover {
+  color: var(--background__1) !important;
+}
+.element button:focus {
+  border: 2px solid var(--light__2);
+}
 
 .element h2 {
   font-size: 1.2em;
@@ -46,19 +65,7 @@
   padding: 1em;
   width: 100%;
 }
-.names {
-  margin: 1em;
-  padding: 0.5em;
 
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  width: calc(100% - 2em);
-
-  place-items: center;
-
-  border-radius: 9px;
-  border: 2px solid var(--border);
-}
 @media (max-width: 1150px) {
   .container {
     width: clamp(320px, 600px, 90vw);
@@ -75,18 +82,14 @@
   font-weight: 500;
   color: var(--light__2);
 }
-.names span:first-child {
-  /* place-self: start; */
-}
+
 .record {
   -webkit-tap-highlight-color: transparent;
   position: relative;
 
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-areas:
-    'date points tens button'
-    'note note note note';
+  grid-template-columns: 1fr 1fr;
+
   place-items: center;
 
   width: 100%;
@@ -103,9 +106,6 @@
   transition: all 0.1s linear;
 }
 
-.record:nth-child(odd) {
-  background-color: var(--background__1);
-}
 .record button {
   padding: 0.5em;
   font-size: 0.85em;
@@ -115,10 +115,10 @@
 .record:nth-child(even) button {
   background-color: var(--background__1);
 }
-.maxscore {
-  color: var(--light__4);
-  font-size: 0.9em;
+.record:nth-child(odd) {
+  background-color: var(--background__1);
 }
+
 /* .record:last-child {
   border-bottom: 2px solid var(--border);
 } */
@@ -135,25 +135,6 @@
   width: 100%;
 }
 .date {
-  grid-area: date;
 }
-.points {
-  grid-area: points;
-}
-.tens {
-  grid-area: tens;
-}
-.note--button {
-  grid-area: button;
-}
-.note:not(:empty) {
-  /* margin-top: 10px;
-  border-top: 1px solid var(--border); */
-  grid-area: note;
-  width: 100%;
-  padding: 1em 1em 0 1em;
-  place-self: start;
-
-  color: var(--light__1);
-  word-wrap: break-word;
+.edit--button {
 }

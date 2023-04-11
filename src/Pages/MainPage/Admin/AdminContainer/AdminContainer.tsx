@@ -10,14 +10,18 @@ import styles from './AdminContainer.module.css';
 import { ReactComponent as Logout } from 'assets/logout.svg';
 import { Outlet } from 'react-router';
 import HeaderContext from 'store/HeaderContext';
+import useLogout from 'utils/useLogout';
 
 const AdminContainer: FC = () => {
   const { user } = useContext(AppContext);
   const [isProgressBar, setIsProgressBar] = useState(false);
   const { steps, currentStep, nextStep, prevStep } = useProgressBarValues(4, 0);
+
+  const { data, loading, logout } = useLogout();
   const [CTA, setCTA] = useState<HeaderCTAProps>({
     Icon: Logout,
-    text: 'Wyloguj się',
+    text: loading ? '...' : 'Wyloguj się',
+    callback: logout,
   });
   const [text, setText] = useState(`${user?.firstName} ${user?.secondName}`);
 

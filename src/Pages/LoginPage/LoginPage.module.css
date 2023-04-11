@@ -1,0 +1,101 @@
+.container {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+.main {
+  background-color: var(--background__2);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  width: 900px;
+  max-width: calc(100vw - 2em);
+  margin: 1em;
+  padding: 2em;
+  border-radius: 1em;
+  color: var(--light__2);
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5),
+    inset 5px 5px 15px rgba(255, 255, 255, 0.04);
+  /* 0 0 30px rgba(21, 188, 183, 0.1),
+    0 0 1px rgba(21, 188, 183, 0.5), */
+}
+.logo--container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+.logo--container h2 {
+  /* font-size: 1.6em; */
+  text-align: center;
+}
+.logo--container img {
+  width: 280px;
+}
+.login--container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  /* display: grid;
+  grid-template-rows: auto 1fr;
+  place-items: center; */
+}
+.login--container h1 {
+  text-align: center;
+}
+.login--container form {
+  display: flex;
+  flex-direction: column;
+
+  /* gap: 0.5em; */
+}
+.login--container form input {
+  width: 280px;
+  height: 50px;
+  border-radius: 4px;
+  outline: none;
+  border: 2px solid var(--light__4);
+  background-color: var(--background__1);
+  color: var(--light__2);
+
+  padding: 2px 1em;
+  font-size: 1em;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+
+  transition: all 0.15s ease-in;
+  margin-top: 0.5em;
+}
+.login--container form input[type='submit'] {
+  cursor: pointer;
+  margin-top: 1em;
+}
+.login--container form input[type='submit']:hover {
+  background-color: var(--primary__2);
+  border-color: var(--primary__2);
+  color: var(--background__1);
+}
+.login--container form input:focus {
+  border-color: var(--primary__2);
+}
+.error {
+  color: #e62834;
+  margin: 4px;
+}
+@media (max-width: 720px) {
+  .logo--container {
+    flex-direction: column-reverse;
+    margin-bottom: 2em;
+    gap: 2em;
+  }
+  .main {
+    font-size: 1.2em;
+    margin: unset;
+    padding: 2em;
+    grid-template-columns: unset;
+    grid-template-rows: auto auto;
+  }
+}

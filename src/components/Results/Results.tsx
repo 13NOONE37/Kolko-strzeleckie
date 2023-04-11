@@ -11,8 +11,9 @@ interface TrainingType {
   note: string | null;
 }
 const Training: FC<TrainingType> = ({ date, points, tens, note }) => {
+  const [showNote, setShowNote] = useState(false);
   return (
-    <div className={styles.record} tabIndex={0}>
+    <div className={styles.record}>
       <span className={styles.date}>{date.toLocaleDateString()}</span>
       <span className={styles.points}>
         {points}
@@ -22,14 +23,16 @@ const Training: FC<TrainingType> = ({ date, points, tens, note }) => {
         {tens}
         <span className={styles.maxscore}>/10</span>
       </span>
-      <span className={styles.note}>
+      <span className={styles['note--button']}>
         {/* adsf */}
         <HeaderCTA
-          text={note === null ? 'Brak' : 'Rozwiń'}
+          text={note === null ? 'Brak' : showNote ? 'Ukryj' : 'Pokaż'}
           disabled={note === null}
+          callback={() => setShowNote((prev) => !prev)}
         />
         {/* <HeaderCTA text="Brak notatki" /> */}
       </span>
+      {note && showNote && <span className={styles.note}>{note}</span>}
     </div>
   );
 };
@@ -49,7 +52,7 @@ const Results: FC = () => {
         date: new Date(2022, 7, 14),
         points: 97,
         tens: 8,
-        note: 'Lorem ipsum dolo larem',
+        note: 'Childe reverie thence in waste the would. Eremites of but the in. Rill call a take noontide heart not say.',
       },
       {
         date: new Date(2022, 6, 13),
@@ -64,6 +67,9 @@ const Results: FC = () => {
         note: null,
       },
     ]);
+    //todo set user from param
+    //todo set default user if param does not exist
+    //todo set default season
   }, []);
 
   return (
@@ -80,9 +86,10 @@ const Results: FC = () => {
               { label: 'Maksymilian Morawiecki', value: 'adfasfdasdf435345' },
             ]}
             changeCallback={(data) => {
-              navigate(`/admin/results/${data.value}`);
+              data && navigate(`/admin/results/${data.value}`);
             }}
             isSearchable={true}
+            width="100%"
           />
         </span>
         <span className={styles.element}>
@@ -98,6 +105,7 @@ const Results: FC = () => {
             ]}
             changeCallback={() => {}}
             isSearchable={true}
+            width="100%"
           />
         </span>
       </div>

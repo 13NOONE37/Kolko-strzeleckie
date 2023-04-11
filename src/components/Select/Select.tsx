@@ -8,7 +8,7 @@ type SelectOption = {
 interface SelectProps {
   placeholder: string;
   defaultValue?: SelectOption | undefined;
-  changeCallback: (data: SelectOption) => void;
+  changeCallback: (data: SelectOption | null) => void;
   options: SelectOption[];
   isSearchable: boolean;
   width?: string;
@@ -42,6 +42,7 @@ const Select: FC<SelectProps> = ({
           control: (base) => ({
             ...base,
             borderWidth: '2px',
+            maxWidth: '100%',
           }),
         }}
         theme={(theme) => ({
@@ -50,13 +51,13 @@ const Select: FC<SelectProps> = ({
           colors: {
             ...theme.colors,
             neutral0: '#1c2232', //background-color
-            neutral20: '#242a3a', //border-color
+            neutral20: 'var(--border)', //border-color
             neutral80: ' #02d0c8', //text selected in placeholder
             neutral30: 'var(--primary__1)', //hover border
             neutral40: 'var(--light__1)', //icon-hover-color
             neutral50: '#6c7181', //placeholder
             primary25: 'var(--dark__1__alpha)', //current-select
-            primary: 'var(--light__2)', //active
+            primary: 'var(--primary__1)', //active
             primary50: 'var(--background__1)', //option pressed
           },
         })}

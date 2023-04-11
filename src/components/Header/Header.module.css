@@ -70,10 +70,13 @@
   padding: 0.5em;
   border-radius: 9px;
   background-color: var(--background__2);
+  border: 2px solid transparent;
 }
-.header--button:hover,
-.header--button:focus {
+.header--button:hover:not(:disabled) {
   color: var(--primary__1);
+}
+.header--button:focus {
+  border: 2px solid var(--primary__2);
 }
 .header--button svg {
   height: 1em;

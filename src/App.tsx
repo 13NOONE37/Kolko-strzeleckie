@@ -1,33 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-
-import Header, { useProgressBarValues } from 'components/Header/Header';
-import AdminNavbar from 'components/Nav/ReadyVariations/AdminNavbar';
-import UserNavbar from './components/Nav/ReadyVariations/UserNavbar';
-import { ReactComponent as Logout } from 'assets/logout.svg';
-import Select from 'components/Select/Select';
-import TrainingResult from 'components/TrainingResult/TrainingResult';
-import Ranking from 'components/Ranking/Ranking';
-import LoginPage from 'Pages/LoginPage/LoginPage';
+import axios from 'axios';
 import pages, { pageRoleType, pageType } from 'Pages/pages';
-import AuthRoute from 'Pages/PrivateRoute';
 import GuestRoute from 'Pages/GuestRoute';
 import AppContext from 'store/AppContext';
 import NotFound from 'Pages/NotFound/NotFound';
-import { ROLE } from 'Pages/roles';
 import PrivateRoute from 'Pages/PrivateRoute';
 import { AnimatePresence } from 'framer-motion';
+import useSession from 'utils/useSession';
 
 function App() {
+  axios.defaults.withCredentials = true;
   // const [isLogged, setIsLogged] = useState(false);
   // const [user, setUser] = useState(null);
-  const [isLogged, setIsLogged] = useState(true);
-  const [user, setUser] = useState({
-    role: ROLE.Admin,
-    firstName: 'Oliwer',
-    secondName: 'Klauze',
-  });
+  const [isLogged, setIsLogged] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useSession(setIsLogged, setUser);
 
   // const { steps, currentStep, nextStep, prevStep } = useProgressBarValues(3, 1);
 
