@@ -244,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 break;
 
             case 'getuserslist':
-                if (isAuth()) {
+                if (isAuth() && isAdmin()) {
                     $sql = "SELECT id_uzytkownika, imie, nazwisko FROM uzytkownicy WHERE czyAdmin = 0";
                     $stmt = mysqli_prepare($conn, $sql);
                     mysqli_stmt_execute($stmt);

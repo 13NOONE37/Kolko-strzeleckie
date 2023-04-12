@@ -1,8 +1,17 @@
-import Select from 'components/Select/Select';
-import React, { FC, useEffect, useState } from 'react';
+import Select, { SelectOption } from 'components/Select/Select';
+import React, {
+  FC,
+  useEffect,
+  useLayoutEffect,
+  useReducer,
+  useState,
+} from 'react';
 import styles from './Ranking.module.css';
-
-interface UserType {
+import getSeasons from 'utils/getSeasons';
+import getTrainings from 'utils/getTrainings';
+import getRanking from 'utils/getRanking';
+export interface UserType {
+  id: string | number;
   firstName: string;
   secondName: string;
   points: number;
@@ -10,15 +19,19 @@ interface UserType {
 }
 interface RankingPlaceType extends UserType {
   index: number;
+  multiplyValues: number;
 }
 const RankingPlace: FC<RankingPlaceType> = ({
+  id,
   firstName,
   secondName,
   points,
   tens,
   index,
+  multiplyValues,
 }) => {
   return (
+    //todo onclick redirect('/user/results/?user=adffadsf;season=asdf)
     <div className={styles.record} tabIndex={0}>
       <span className={styles.place}>{index + 1}</span>
       <span className={styles.name}>
@@ -27,270 +40,139 @@ const RankingPlace: FC<RankingPlaceType> = ({
       </span>
       <span className={styles.points}>
         {points}
-        <span className={styles.maxscore}>/100</span>
+        <span className={styles.maxscore}>/{100 * multiplyValues}</span>
       </span>
       <span className={styles.tens}>
         {tens}
-        <span className={styles.maxscore}>/10</span>
+        <span className={styles.maxscore}>/{10 * multiplyValues}</span>
       </span>
     </div>
   );
 };
 
 const Ranking: FC = () => {
-  const [users, setUsers] = useState<UserType[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentSeason, setCurrentSeason] = useState<SelectOption | undefined>(
+    undefined,
+  );
+  const [currentTraining, setCurrentTraining] = useState<
+    SelectOption | undefined
+  >(undefined);
+  const [seasons, setSeasons] = useState<SelectOption[] | undefined>(undefined);
+  const [trainings, setTrainings] = useState<SelectOption[] | undefined>(
+    undefined,
+  );
+  const [users, setUsers] = useState<UserType[] | undefined>(undefined);
+
+  const changeSeason = (season: SelectOption | null) => {
+    if (!season) return;
+    setCurrentSeason(season);
+  };
+  const changeTrainings = (training: SelectOption | null) => {
+    if (!training) return;
+
+    setCurrentTraining(training);
+  };
+
   useEffect(() => {
-    //fetch data
-    setUsers([
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Maksymilian',
-        secondName: 'Morawiecki',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Adam',
-        secondName: 'Kowalski',
-        points: 73,
-        tens: 2,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Adam',
-        secondName: 'Kowalski',
-        points: 73,
-        tens: 2,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Adam',
-        secondName: 'Kowalski',
-        points: 73,
-        tens: 2,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Adam',
-        secondName: 'Kowalski',
-        points: 73,
-        tens: 2,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Adam',
-        secondName: 'Kowalski',
-        points: 73,
-        tens: 2,
-      },
-      {
-        firstName: 'Jan',
-        secondName: 'Kowalski',
-        points: 83,
-        tens: 3,
-      },
-      {
-        firstName: 'Adam',
-        secondName: 'Kowalski',
-        points: 73,
-        tens: 2,
-      },
-    ]);
+    const fetchData = async () => {
+      const data = await getSeasons();
+      setSeasons(data);
+      if (data) {
+        setCurrentSeason(data[0]);
+        setCurrentTraining(undefined);
+      }
+    };
+    fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const date1 = `${String(currentSeason?.value).split('/')[0]}-09-01`;
+      const date2 = `${String(currentSeason?.value).split('/')[1]}-06-30`;
+
+      const data = await getTrainings(date1, date2);
+      setTrainings(data);
+      if (data) {
+        //todo nie updatejtuje sie
+        setCurrentTraining(data[0]);
+      }
+    };
+    if (currentSeason) {
+      fetchData();
+    }
+  }, [currentSeason]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const date1 = String(String(currentTraining?.value).split(';')[0]);
+      const date2 = `${String(currentSeason?.value).split('/')[1]}-09-01`;
+
+      const data = await getRanking(date1, date2);
+      if (data) {
+        setUsers(data);
+      }
+    };
+    if (currentTraining) {
+      fetchData();
+    }
+  }, [currentTraining, currentSeason]);
+
+  useEffect(() => {
+    if (seasons && trainings && users) {
+      setLoading(false);
+    }
+  }, [seasons, trainings, users]);
+
   return (
-    <div className={styles.container}>
-      <div className={styles.heading}>
-        <span className={styles.element}>
-          <h2>Najlepsi w sezonie: </h2>
-          {/* <span className={styles.color}>{'2022/23'}</span> */}
-          <Select
-            placeholder="Sezon"
-            defaultValue={{ label: '2022/23', value: '22/23' }}
-            options={[
-              { label: '2022/23', value: '22/23' },
-              { label: '2021/22', value: '21/22' },
-              { label: '2020/21', value: '20/21' },
-            ]}
-            changeCallback={() => {}}
-            isSearchable={true}
-          />
-        </span>
-        <span className={styles.element}>
-          <h2>Liczba treningów:</h2>
-          {/* <span className={styles.color}>{'4'}</span> */}
-          <Select
-            placeholder="Liczba treningów"
-            defaultValue={{ label: '1', value: 1 }}
-            options={[
-              { label: '1', value: 1 },
-              { label: '2', value: 2 },
-              { label: '3', value: 3 },
-              { label: '4', value: 4 },
-              { label: '5', value: 5 },
-              { label: '6', value: 6 },
-              { label: '7', value: 7 },
-              { label: '8', value: 8 },
-              { label: '9', value: 9 },
-              { label: '10', value: 10 },
-            ]}
-            changeCallback={() => {}}
-            isSearchable={true}
-          />
-        </span>
-      </div>
+    <>
+      {loading ? (
+        '...'
+      ) : (
+        <div className={styles.container}>
+          <div className={styles.heading}>
+            <span className={styles.element}>
+              <h2>Najlepsi w sezonie: </h2>
 
-      <div className={styles.names}>
-        <span>Uczeń</span>
-        <span>Punkty</span>
-        <span>Dziesiątki</span>
-      </div>
+              <Select
+                placeholder="Sezon"
+                defaultValue={currentSeason}
+                options={seasons}
+                changeCallback={changeSeason}
+                isSearchable={true}
+              />
+            </span>
+            <span className={styles.element}>
+              <h2>Liczba treningów:</h2>
 
-      <div className={styles.ranking}>
-        {users.length > 0 ? (
-          <>
-            {users.map((user: UserType, index: number) => (
-              <RankingPlace {...user} index={index} />
+              <Select
+                placeholder="Liczba treningów"
+                defaultValue={currentTraining}
+                options={trainings}
+                changeCallback={changeTrainings}
+                isSearchable={true}
+              />
+            </span>
+          </div>
+
+          <div className={styles.names}>
+            <span>Uczeń</span>
+            <span>Punkty</span>
+            <span>Dziesiątki</span>
+          </div>
+
+          <div className={styles.ranking}>
+            {users?.map((user: UserType, index: number) => (
+              <RankingPlace
+                {...user}
+                multiplyValues={Number(currentTraining?.label)}
+                index={index}
+              />
             ))}
-          </>
-        ) : (
-          <h1>display skeleton loading</h1>
-        )}
-      </div>
-    </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

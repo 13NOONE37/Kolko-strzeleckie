@@ -14,7 +14,7 @@ function App() {
   axios.defaults.withCredentials = true;
   // const [isLogged, setIsLogged] = useState(false);
   // const [user, setUser] = useState(null);
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(null);
   const [user, setUser] = useState(null);
 
   useSession(setIsLogged, setUser);

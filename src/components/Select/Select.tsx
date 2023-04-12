@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import ReactSelect from 'react-select';
 
-type SelectOption = {
+export type SelectOption = {
   label: string;
   value: string | number;
 };
@@ -9,7 +9,7 @@ interface SelectProps {
   placeholder: string;
   defaultValue?: SelectOption | undefined;
   changeCallback: (data: SelectOption | null) => void;
-  options: SelectOption[];
+  options: SelectOption[] | undefined;
   isSearchable: boolean;
   width?: string;
 }

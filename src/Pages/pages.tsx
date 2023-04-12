@@ -15,6 +15,8 @@ export interface pageType {
 export interface pageRoleType extends pageType {
   roles: ROLE[];
 }
+//todo porobic parametry w poszeczegolnych stronach
+//todo jeden jest juz zrobiony w user/results/id
 const pages: {
   guestPages: pageType[];
   authPages: pageRoleType[];
@@ -37,11 +39,11 @@ const pages: {
       roles: [ROLE.User],
       subPages: [
         {
-          path: '/user/ranking',
+          path: '/user/ranking/:season?/:trainings?',
           element: <UserRanking />,
         },
         {
-          path: '/user/results',
+          path: '/user/results/:id?/:season?',
           element: <UserResults />,
         },
       ],
@@ -52,11 +54,11 @@ const pages: {
       roles: [ROLE.Admin],
       subPages: [
         {
-          path: '/admin/ranking',
+          path: '/admin/ranking/:season?/:trainings?',
           element: <AdminRanking />,
         },
         {
-          path: '/admin/results/:id?',
+          path: '/admin/results/:id?/:season?',
           element: <AdminResults />,
         },
         {

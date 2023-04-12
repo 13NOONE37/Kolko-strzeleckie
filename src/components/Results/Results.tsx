@@ -1,8 +1,10 @@
 import { HeaderCTA } from 'components/Header/Header';
-import Select from 'components/Select/Select';
-import React, { FC, useEffect, useState } from 'react';
+import Select, { SelectOption } from 'components/Select/Select';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import styles from './Results.module.css';
+import AppContext from 'store/AppContext';
+import { ROLE } from 'Pages/roles';
 
 interface TrainingType {
   date: Date;
@@ -38,13 +40,92 @@ const Training: FC<TrainingType> = ({ date, points, tens, note }) => {
 };
 
 const Results: FC = () => {
-  const [user, setUser] = useState(null);
-  const [season, setSeason] = useState(null);
-  const navigate = useNavigate();
-
-  const { id } = useParams();
+  const { user } = useContext(AppContext);
 
   const [trainings, setTrainings] = useState<TrainingType[]>([]);
+
+  const [currentUser, setCurrentUser] = useState<SelectOption | undefined>(
+    undefined,
+  );
+  const [currentSeason, setCurrentSeason] = useState<SelectOption | undefined>(
+    undefined,
+  );
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  //  const [loading, setLoading] = useState(true);
+  //   const [currentSeason, setCurrentSeason] = useState<SelectOption | undefined>(
+  //     undefined,
+  //   );
+  //   const [currentTraining, setCurrentTraining] = useState<
+  //     SelectOption | undefined
+  //   >(undefined);
+  //   const [seasons, setSeasons] = useState<SelectOption[] | undefined>(undefined);
+  //   const [trainings, setTrainings] = useState<SelectOption[] | undefined>(
+  //     undefined,
+  //   );
+  //   const [users, setUsers] = useState<UserType[] | undefined>(undefined);
+
+  //   const changeSeason = (season: SelectOption | null) => {
+  //     if (!season) return;
+  //     setCurrentSeason(season);
+  //   };
+  //   const changeTrainings = (training: SelectOption | null) => {
+  //     if (!training) return;
+
+  //     setCurrentTraining(training);
+  //   };
+
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       const data = await getSeasons();
+  //       setSeasons(data);
+  //       if (data) {
+  //         setCurrentSeason(data[0]);
+  //         setCurrentTraining(undefined);
+  //       }
+  //     };
+  //     fetchData();
+  //   }, []);
+
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       const date1 = `${String(currentSeason?.value).split('/')[0]}-09-01`;
+  //       const date2 = `${String(currentSeason?.value).split('/')[1]}-06-30`;
+
+  //       const data = await getTrainings(date1, date2);
+  //       setTrainings(data);
+  //       if (data) {
+  //         //todo nie updatejtuje sie
+  //         setCurrentTraining(data[0]);
+  //       }
+  //     };
+  //     if (currentSeason) {
+  //       fetchData();
+  //     }
+  //   }, [currentSeason]);
+
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       const date1 = String(String(currentTraining?.value).split(';')[0]);
+  //       const date2 = `${String(currentSeason?.value).split('/')[1]}-09-01`;
+
+  //       const data = await getRanking(date1, date2);
+  //       if (data) {
+  //         setUsers(data);
+  //       }
+  //     };
+  //     if (currentTraining) {
+  //       fetchData();
+  //     }
+  //   }, [currentTraining, currentSeason]);
+
+  //   useEffect(() => {
+  //     if (seasons && trainings && users) {
+  //       setLoading(false);
+  //     }
+  //   }, [seasons, trainings, users]);
+
   useEffect(() => {
     //fetch data
     setTrainings([
@@ -78,19 +159,25 @@ const Results: FC = () => {
         <span className={styles.element}>
           <h2>Użytkownik: </h2>
           {/* <span className={styles.color}>{'2022/23'}</span> */}
-          <Select
-            placeholder="Użytkownik"
-            defaultValue={{ label: 'Oliwer Klauze', value: 'adsf3204odsf' }}
-            options={[
-              { label: 'Jan Kowalski', value: 'asdf324' },
-              { label: 'Maksymilian Morawiecki', value: 'adfasfdasdf435345' },
-            ]}
-            changeCallback={(data) => {
-              data && navigate(`/admin/results/${data.value}`);
-            }}
-            isSearchable={true}
-            width="100%"
-          />
+          {user.role === ROLE.Admin ? (
+            <Select
+              placeholder="Użytkownik"
+              defaultValue={{ label: 'Oliwer Klauze', value: 'adsf3204odsf' }}
+              options={[
+                { label: 'Jan Kowalski', value: 'asdf324' },
+                { label: 'Maksymilian Morawiecki', value: 'adfasfdasdf435345' },
+              ]}
+              changeCallback={(data) => {
+                data && navigate(`/admin/results/${data.value}`);
+              }}
+              isSearchable={true}
+              width="100%"
+            />
+          ) : (
+            <span
+              className={styles.color}
+            >{`${user?.firstName} ${user?.secondName}`}</span>
+          )}
         </span>
         <span className={styles.element}>
           <h2>Sezon: </h2>
