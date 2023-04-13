@@ -29,7 +29,9 @@ const getUserTrainings = async (
         },
       },
     );
-    if (response.code === '204') {
+    const tempResponse: any = response; //!bad solution
+
+    if (tempResponse.code === '204') {
       return [];
     } else {
       return response.map((item, index) => {

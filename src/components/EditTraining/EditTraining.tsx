@@ -64,7 +64,7 @@ const EditTraining: FC<EditTrainingType> = ({ training_id }) => {
     const fetchData = async () => {
       const data = await getUserTrainingInfo(training_id);
       if (data) {
-        setTrainingInfo(data);
+        setTrainingInfo(data as any);
       }
     };
     fetchData();
