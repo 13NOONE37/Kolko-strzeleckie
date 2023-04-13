@@ -17,74 +17,112 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1em;
-  /* display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px; */
+  gap: 1rem;
 
   color: var(--light__2);
-  padding: 1em;
+  padding: 1rem;
   border-bottom: 2px solid var(--border);
   font-size: 24px;
   font-weight: 700;
 }
-
-.element {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 0.5em;
-  align-items: center;
-  font-size: 0.8em;
-}
-/* .element button {
-  font-size: 1em;
-  letter-spacing: 0.25px;
-  font-weight: 600;
-  background-color: var(--background__1);
-} */
-.cta button {
-  font-size: 1em;
-  letter-spacing: 0.25px;
-  font-weight: 600;
-  background-color: var(--primary__2);
-  color: var(--background__1);
-  border-radius: 4px;
-}
-.cta button:hover {
-  color: var(--background__1) !important;
-}
-.cta button:focus {
-  border: 2px solid var(--light__2);
-}
-
-.element h2 {
-  font-size: 1.2em;
-}
-
-.ranking {
-  padding: 1em;
+.cancel {
   width: 100%;
 }
-.datepicker {
+.cancel button {
   width: 100%;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
-  background-color: transparent;
-  border: none;
   outline: none;
-  font-size: 1em;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--primary__2);
+  color: hsl(356, 70%, 53%);
+
   white-space: nowrap;
   transition: color 0.1s linear;
   padding: 0.5em;
   border-radius: 4px;
-  background-color: var(--background__2) !important;
-  border: 2px solid var(--primary__1);
+  background-color: var(--background__1);
+  border: 2px solid transparent;
+}
+.cancel button:hover {
+  color: hsl(356, 90%, 53%) !important;
+}
+.cancel button:focus {
+  border-color: #e62834;
+}
+.element button,
+.fields button {
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary__1);
+
+  white-space: nowrap;
+  transition: color 0.1s linear;
+  padding: 0.5em;
+  border-radius: 4px;
+  background-color: var(--background__1);
+  border: 2px solid transparent;
+}
+.element {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  gap: 0.5em;
+  align-items: center;
+  font-size: 0.8em;
+  margin-top: 1em;
+}
+
+.element h2 {
+  font-size: 1.2em;
+}
+.fields {
+  width: 100%;
+  padding: 1rem;
+
+  display: grid;
+  grid-template-areas: 'points tens' 'note note' 'button button';
+  grid-gap: 0.5rem;
+}
+.input {
+  width: 100%;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--light__2);
+
+  white-space: nowrap;
+  transition: color 0.1s linear;
+  padding: 0.5em;
+  border-radius: 4px;
+  background-color: var(--background__1);
+  border: 2px solid transparent;
+}
+.input:focus {
+  border-color: var(--primary__1);
+}
+.points {
+  grid-area: points;
+}
+.tens {
+  grid-area: tens;
+}
+.note {
+  grid-area: note;
+  resize: none;
+  height: 8rem;
+}
+.fields button {
+  grid-area: button;
 }
 @media (max-width: 1150px) {
   .container {
@@ -95,74 +133,4 @@
   .heading {
     font-size: 18px;
   }
-}
-
-.names span {
-  font-size: 1em;
-  font-weight: 500;
-  color: var(--light__2);
-}
-
-.record {
-  -webkit-tap-highlight-color: transparent;
-  position: relative;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  place-items: center;
-
-  width: 100%;
-  padding: 1em 8px;
-
-  font-size: 1em;
-  font-weight: 500;
-  color: var(--light__2);
-
-  border: 2px solid transparent;
-  border-radius: 9px;
-  outline: none;
-
-  transition: all 0.1s linear;
-}
-
-.record button {
-  padding: 0.5em;
-  font-size: 0.85em;
-  letter-spacing: 0.25px;
-  font-weight: 600;
-}
-.record:nth-child(even) button {
-  background-color: var(--background__1);
-}
-.record:nth-child(odd) {
-  background-color: var(--background__1);
-}
-
-/* .record:last-child {
-  border-bottom: 2px solid var(--border);
-} */
-
-/* .record:focus-within button {
-  border: 2px solid var(--primary__2);
-} */
-
-.name {
-  justify-self: start;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  width: 100%;
-}
-.date {
-}
-.edit--button {
-}
-.error {
-  text-align: center;
-  color: #e62834;
-}
-.info {
-  text-align: center;
-  color: var(--primary__1);
 }

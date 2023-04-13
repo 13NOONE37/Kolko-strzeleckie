@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SelectOption } from 'components/Select/Select';
 
 interface UserType {
   id_uzytkownika: number | string;

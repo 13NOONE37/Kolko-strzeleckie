@@ -7,6 +7,7 @@ type TrainingData = {
   punkty: number;
   dziesiatki: number;
   uwagi: string;
+  id_uzytkownika: string;
 };
 
 const getUserTrainingInfo = async (training_id: string | number) => {
@@ -29,7 +30,7 @@ const getUserTrainingInfo = async (training_id: string | number) => {
     } else {
       return response.map((item, index) => {
         return {
-          date: new Date(item.data_treningu),
+          user_id: item.id_uzytkownika,
           points: item.punkty,
           tens: item.dziesiatki,
           note: item.uwagi,

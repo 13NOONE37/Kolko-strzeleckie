@@ -1,4 +1,38 @@
 <?php
+// Charakterystyka programu
+//--------------------------
+// Autorzy programu
+//----------------------------------------
+// Zespół projektowy
+// Nazwa szkoły: Zespół Szkół Ogólnokształcących i Technicznych w Kłodawie
+// Nauczyciel - opiekun grupy projektowej: Magda Malicka, Jacek Malicki
+// Uczniowie - członkowie zespołu projektowego:
+// 1.Oliwer Klauze
+// 2.Olek Szkudlarek
+// 3.Szymon Szafrański
+// 4.Szymon Siemiński
+// 5.Ola Zabłocka
+// 6.Mikołaj Wróblewski
+// 7.Kuba Gralinski
+// 8. Krzysztof Kużmiński
+// 9.Jan Dąbrowski
+// 10. Dominik Kowalski
+//----------------------------------------
+// Opis programu
+//----------------------------------------
+// Opisywanym programem jest system do zarządzania bazą danych
+// szkolnego koła strzeleckiego. Backend został oparty na bazie danych
+// MySQL. Działanie serwera zostało oparte na żądaniach POST.
+// Dzięki temu frontend aplikacji nie jest zależny od naszego
+// backendu lecz działa z nim w ścisłej współpracy jako osobna aplikacja.
+// Do skategoryzowania konkretnych działań serwera jest używany parametr
+// "action" który w zależności od podanej nazwy prowadzi do innego działania.
+// Inne dane które będą przekazywane zależne są od parametru "action".
+// Niektóre z działań dostępne są tylko dla administratorów.
+//----------------------------------------
+
+
+
 session_start();
 require('functions.php');
 
@@ -6,6 +40,8 @@ $host = 'localhost';
 $username = 'root';
 $password = '';
 $database = 'apka_strzelectwo';
+$url = 'http://localhost:5173';
+
 
 $conn = mysqli_connect($host, $username, $password, $database);
 
@@ -15,80 +51,12 @@ if (!$conn) {
 
 
 header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Origin: $url");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Credentials: true");
 
 
-//!done
-//?dane treningów konkrentego użytkownika parametry które musimy tu zmienić to imie, nazwisko, i data w zaleznosci od sezonu
-//? w POSTcie trzeba już zaakceptować konkretną datę od ktorej do której chcemy treningi
-// SELECT treningi.data_treningu, wyniki.punkty, wyniki.dziesiatki, wyniki.uwagi
-// FROM treningi INNER JOIN (uzytkownicy INNER JOIN wyniki ON uzytkownicy.id_uzytkownika = wyniki.id_uzytkownika) ON treningi.id_treningu = wyniki.id_treningu
-// WHERE uzytkownicy.id='$id_uzytkownika' AND treningi.data_treningu BETWEEN '$start_date' AND '$end_date'
-// ORDER BY treningi.data_treningu DESC;
-//!done
-
-//!done
-//?lista treningów z danego sezonu od ostatniego do najstarszego
-//?przyda się w rankingu w wyborze ile ostatnich treningów chcemy uwzględnić
-//?przyda się też w treningach w panelu paluszkiewicza
-//? akceptuje dwa parametry poczatek sezonu i koniec
-// SELECT treningi.data_treningu, treningi.id_treningu
-// FROM treningi
-// WHERE treningi.data_treningu BETWEEN '2022-09-01' AND '2023-06-30'
-// ORDER BY treningi.data_treningu DESC;
-//!done
-
-//!done
-//?ranking
-//?akceptuje od którego do którego treningu chcemy brać pod uwagę treningi
-//?ostatnim parametrem będzie data końca sezonu a pierwszym ilość treningów
-//? w praktyce data z listy treningów która jest już posortowana
-// SELECT uzytkownicy.id_uzytkownika, Sum(wyniki.punkty) AS SumOfpunkty, Sum(wyniki.dziesiatki) AS SumOfdziesiatki, uzytkownicy.imie, uzytkownicy.nazwisko
-// FROM treningi INNER JOIN (uzytkownicy INNER JOIN wyniki ON uzytkownicy.id_uzytkownika = wyniki.id_uzytkownika) ON treningi.id_treningu = wyniki.id_treningu
-// WHERE (((treningi.data_treningu) >= '2023-04-22' AND (treningi.data_treningu) <= '2023-06-30'))
-// GROUP BY uzytkownicy.id_uzytkownika, uzytkownicy.imie, uzytkownicy.nazwisko
-// ORDER BY SumOfpunkty DESC;
-//!done
-
-
-//!done
-//?lista użytkowników bez admina
-// SELECT uzytkownicy.id_uzytkownika, uzytkownicy.imie, uzytkownicy.nazwisko
-// FROM uzytkownicy
-// WHERE (((uzytkownicy.czyAdmin)=False));
-//!done
-
-
-
-//!done
-//todo nie wiem czy to w ogóle potrzebne
-//?dane o treningu kiedy będziemy go edytować
-//?parametr id treningu
-// SELECT uzytkownicy.id_uzytkownika, uzytkownicy.imie, uzytkownicy.nazwisko, wyniki.punkty, wyniki.dziesiatki, wyniki.uwagi
-// FROM uzytkownicy INNER JOIN (treningi INNER JOIN wyniki ON treningi.id_treningu = wyniki.id_treningu) ON uzytkownicy.id_uzytkownika = wyniki.id_uzytkownika
-// WHERE treningi.id_treningu= 1 '$training_id';
-//!done
-
-//!done
-//?stworz trening
-//?parametr data
-//INSERT INTO treningi VALUES(null,"2024-04-04")
-//!done
-
-//!done
-
-//?aktualizuj trening
-//?parametr id treningu
-//?sprawdzamy czy dany trening już istnieje
-//?jesli zapytanie zwróci jakiś rekord to będziemy go aktualizować
-//SELECT * FROM `wyniki` WHERE id_treningu=1 AND id_uzytkownika=1
-//?jesli nie zwroci to tworzymy nowy rekord
-// INSERT INTO wyniki (id_treningu, id_uzytkownika, punkty, dziesiatki, uwagi) 
-// VALUES (1, 2, '88', '6', '')
-//!done
 
 function missingFieldsError()
 {
@@ -407,6 +375,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             echo json_encode(array('info' => $res, 'message' => 'Dodano wyniki.', 'code' => '200'));
 
                         }
+
+                    } else {
+                        missingFieldsError();
+
+                    }
+                } else {
+                    authRequiredError();
+                }
+                break;
+            case 'deletetraining':
+                if (isAuth() && isAdmin()) {
+                    if (isset($_POST['training_id'])) {
+                        $training_id = $_POST['training_id'];
+                        $query1 = "DELETE FROM treningi WHERE id_treningu = ?";
+                        $query2 = "DELETE FROM wyniki WHERE id_treningu = ?";
+                        $stmt1 = mysqli_prepare($conn, $query1);
+                        $stmt2 = mysqli_prepare($conn, $query2);
+
+                        mysqli_stmt_bind_param($stmt1, "i", $training_id);
+                        mysqli_stmt_bind_param($stmt2, "i", $training_id);
+
+                        mysqli_stmt_execute($stmt1);
+                        mysqli_stmt_execute($stmt2);
+
+
+                        echo json_encode(array('info' => mysqli_affected_rows($conn), 'message' => 'Trening usunięty pomyślnie.', 'code' => '200'));
 
                     } else {
                         missingFieldsError();

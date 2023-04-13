@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SelectOption } from 'components/Select/Select';
 
 type TrainingData = {
   data_treningu: string;

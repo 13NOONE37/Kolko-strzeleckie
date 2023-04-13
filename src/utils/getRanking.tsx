@@ -1,6 +1,4 @@
-import React from 'react';
 import axios from 'axios';
-import { UserType } from 'store/AppContext';
 
 const getRanking = async (start_date: string, end_date: string) => {
   try {

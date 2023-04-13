@@ -108,7 +108,8 @@
   position: relative;
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 4fr 1fr 1fr;
+  grid-gap: 5px;
 
   place-items: center;
 
@@ -131,6 +132,16 @@
   font-size: 0.85em;
   letter-spacing: 0.25px;
   font-weight: 600;
+}
+
+.record button:nth-child(3) {
+  color: hsl(356, 70%, 53%);
+}
+.record button:nth-child(3):hover {
+  color: hsl(356, 90%, 53%);
+}
+.record button:nth-child(3):focus {
+  border-color: #e62834;
 }
 .record:nth-child(even) button {
   background-color: var(--background__1);

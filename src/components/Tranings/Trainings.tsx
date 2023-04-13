@@ -9,18 +9,47 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import pl from 'date-fns/locale/pl';
 import createTraining from 'utils/createTraining';
+import deleteTraining from 'utils/deleteTraining';
+import EditTraining from 'components/EditTraining/EditTraining';
 registerLocale('pl', pl);
 
 interface TrainingType {
   id: String | Number;
   date: Date;
+  setCreatingInfo: (a: string | null) => void;
+  setTrainingEditing: (a: string) => void;
 }
-const Training: FC<TrainingType> = ({ id, date }) => {
+const Training: FC<TrainingType> = ({
+  id,
+  date,
+  setCreatingInfo,
+  setTrainingEditing,
+}) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    if (
+      window.confirm(
+        'Czy na pewno chcesz usunąć trening? To działanie jest nieodwracalne.',
+      )
+    ) {
+      await deleteTraining(String(id));
+      setCreatingInfo('Trening usunięty pomyślnie');
+      setTimeout(() => {
+        setCreatingInfo(null);
+      }, 3000);
+    }
+    setIsDeleting(false);
+  };
   return (
     <div className={styles.record}>
       <span className={styles.date}>{date.toLocaleDateString()}</span>
 
-      <HeaderCTA text="Edytuj" />
+      <HeaderCTA
+        text="Edytuj"
+        callback={() => setTrainingEditing(String(id))}
+      />
+      <HeaderCTA text={isDeleting ? '...' : 'Usuń'} callback={handleDelete} />
     </div>
   );
 };
@@ -62,7 +91,6 @@ const Trainings: FC = () => {
     }, 3000);
     setisTrainingCreating(false);
   };
-
   const changeSeason = (season: SelectOption | null) => {
     if (!season) return;
     setCurrentSeason(season);
@@ -78,7 +106,6 @@ const Trainings: FC = () => {
     };
     fetchData();
   }, []);
-
   useEffect(() => {
     const fetchData = async () => {
       const date1 = `${String(currentSeason?.value).split('/')[0]}-09-01`;
@@ -91,18 +118,19 @@ const Trainings: FC = () => {
       fetchData();
     }
   }, [currentSeason, creatingInfo]);
-
   useEffect(() => {
     if (seasons && trainings) {
       setLoading(false);
     }
   }, [seasons, trainings]);
 
+  const [trainingEditing, setTrainingEditing] = useState<string | null>(null);
+
   return (
     <>
       {loading ? (
         '...'
-      ) : (
+      ) : trainingEditing === null ? (
         <div className={styles.container}>
           <div className={styles.heading}>
             <span className={styles.element}>
@@ -148,10 +176,17 @@ const Trainings: FC = () => {
               <Training
                 id={String(training.value).split(';')[1]}
                 date={new Date(String(training.value).split(';')[0])}
+                setCreatingInfo={setCreatingInfo}
+                setTrainingEditing={setTrainingEditing}
               />
             ))}
           </div>
         </div>
+      ) : (
+        <EditTraining
+          training_id={String(trainingEditing)}
+          setTrainingEditing={setTrainingEditing}
+        />
       )}
     </>
   );

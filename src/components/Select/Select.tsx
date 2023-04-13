@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import ReactSelect from 'react-select';
 
 export type SelectOption = {
@@ -21,8 +21,6 @@ const Select: FC<SelectProps> = ({
   isSearchable,
   width,
 }) => {
-  const [isOpen, setIsOpen] = useState(!false);
-  const [highlithedIndex, setHighlithedIndex] = useState(null);
   return (
     <div
       style={{
@@ -33,7 +31,7 @@ const Select: FC<SelectProps> = ({
       <ReactSelect
         className={'sadf'}
         placeholder={placeholder}
-        defaultValue={defaultValue}
+        value={defaultValue}
         options={options}
         onChange={changeCallback}
         isSearchable={isSearchable}

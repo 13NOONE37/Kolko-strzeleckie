@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const createTraining = async (date: string) => {
+const deleteTraining = async (training_id: string) => {
   try {
     const { data: response } = await axios.post(
       import.meta.env.VITE_API,
       {
-        action: 'createtraining',
-        date: date,
+        action: 'deletetraining',
+        training_id: training_id,
       },
       {
         headers: {
@@ -20,4 +20,4 @@ const createTraining = async (date: string) => {
   }
 };
 
-export default createTraining;
+export default deleteTraining;

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import styles from './Header.module.css';
 
 export interface ProgressBarValuesInterface {
