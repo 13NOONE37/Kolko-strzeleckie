@@ -16,13 +16,13 @@ const UserNavbar: FC = () => {
           name: 'Ranking',
           Icon: Ranking,
           callback: () => navigate('/user/ranking'),
-          active: pathname === '/user/ranking',
+          active: pathname.toLowerCase() === '/user/ranking',
         },
         {
           name: 'Twoje wyniki',
           Icon: Target,
           callback: () => navigate('/user/results'),
-          active: pathname === '/user/results',
+          active: pathname.toLowerCase() === '/user/results',
         },
       ]}
     />

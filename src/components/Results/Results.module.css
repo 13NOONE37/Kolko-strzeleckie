@@ -157,3 +157,8 @@
   color: var(--light__1);
   word-wrap: break-word;
 }
+
+.color {
+  color: var(--primary__1);
+  margin-left: 4px;
+}

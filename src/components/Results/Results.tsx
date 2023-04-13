@@ -5,6 +5,9 @@ import { useNavigate, useParams } from 'react-router';
 import styles from './Results.module.css';
 import AppContext from 'store/AppContext';
 import { ROLE } from 'Pages/roles';
+import getUserTrainings from 'utils/getUserTrainings';
+import getSeasons from 'utils/getSeasons';
+import getUsers from 'utils/getUsers';
 
 interface TrainingType {
   date: Date;
@@ -28,7 +31,13 @@ const Training: FC<TrainingType> = ({ date, points, tens, note }) => {
       <span className={styles['note--button']}>
         {/* adsf */}
         <HeaderCTA
-          text={note === null ? 'Brak' : showNote ? 'Ukryj' : 'Pokaż'}
+          text={
+            note === null || note.trim().length === 0
+              ? 'Brak'
+              : showNote
+              ? 'Ukryj'
+              : 'Pokaż'
+          }
           disabled={note === null}
           callback={() => setShowNote((prev) => !prev)}
         />
@@ -40,9 +49,15 @@ const Training: FC<TrainingType> = ({ date, points, tens, note }) => {
 };
 
 const Results: FC = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   const { user } = useContext(AppContext);
 
+  const [loading, setLoading] = useState(true);
   const [trainings, setTrainings] = useState<TrainingType[]>([]);
+  const [seasons, setSeasons] = useState<SelectOption[] | undefined>(undefined);
+  const [users, setUsers] = useState<SelectOption[] | undefined>(undefined);
 
   const [currentUser, setCurrentUser] = useState<SelectOption | undefined>(
     undefined,
@@ -50,81 +65,64 @@ const Results: FC = () => {
   const [currentSeason, setCurrentSeason] = useState<SelectOption | undefined>(
     undefined,
   );
-  const navigate = useNavigate();
-  const { id } = useParams();
 
-  //  const [loading, setLoading] = useState(true);
-  //   const [currentSeason, setCurrentSeason] = useState<SelectOption | undefined>(
-  //     undefined,
-  //   );
-  //   const [currentTraining, setCurrentTraining] = useState<
-  //     SelectOption | undefined
-  //   >(undefined);
-  //   const [seasons, setSeasons] = useState<SelectOption[] | undefined>(undefined);
-  //   const [trainings, setTrainings] = useState<SelectOption[] | undefined>(
-  //     undefined,
-  //   );
-  //   const [users, setUsers] = useState<UserType[] | undefined>(undefined);
+  const changeUser = (user: SelectOption | null) => {
+    if (!user) return;
+    setCurrentUser(user);
+  };
+  const changeSeason = (season: SelectOption | null) => {
+    if (!season) return;
+    setCurrentSeason(season);
+  };
 
-  //   const changeSeason = (season: SelectOption | null) => {
-  //     if (!season) return;
-  //     setCurrentSeason(season);
-  //   };
-  //   const changeTrainings = (training: SelectOption | null) => {
-  //     if (!training) return;
+  useEffect(() => {
+    //fetch users
+    const fetchData1 = async () => {
+      const data = await getUsers();
+      setUsers(data);
+      if (data) {
+        setCurrentUser(data[0]);
+      }
+    };
+    if (user?.role === ROLE.Admin) {
+      fetchData1();
+    } else {
+      setUsers([]);
+    }
 
-  //     setCurrentTraining(training);
-  //   };
+    //fetch seasons
+    const fetchData2 = async () => {
+      const data = await getSeasons();
+      setSeasons(data);
+      if (data) {
+        setCurrentSeason(data[0]);
+      }
+    };
+    fetchData2();
+  }, []);
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       const data = await getSeasons();
-  //       setSeasons(data);
-  //       if (data) {
-  //         setCurrentSeason(data[0]);
-  //         setCurrentTraining(undefined);
-  //       }
-  //     };
-  //     fetchData();
-  //   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const date1 = `${String(currentSeason?.value).split('/')[0]}-09-01`;
+      const date2 = `${String(currentSeason?.value).split('/')[1]}-06-30`;
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       const date1 = `${String(currentSeason?.value).split('/')[0]}-09-01`;
-  //       const date2 = `${String(currentSeason?.value).split('/')[1]}-06-30`;
+      const id = user?.role === ROLE.Admin ? currentUser?.value : user?.id;
 
-  //       const data = await getTrainings(date1, date2);
-  //       setTrainings(data);
-  //       if (data) {
-  //         //todo nie updatejtuje sie
-  //         setCurrentTraining(data[0]);
-  //       }
-  //     };
-  //     if (currentSeason) {
-  //       fetchData();
-  //     }
-  //   }, [currentSeason]);
+      const data = await getUserTrainings(id as string, date1, date2);
+      if (data) {
+        setTrainings(data);
+      }
+    };
+    if (currentSeason && (currentUser || user)) {
+      fetchData();
+    }
+  }, [currentUser, currentSeason]);
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       const date1 = String(String(currentTraining?.value).split(';')[0]);
-  //       const date2 = `${String(currentSeason?.value).split('/')[1]}-09-01`;
-
-  //       const data = await getRanking(date1, date2);
-  //       if (data) {
-  //         setUsers(data);
-  //       }
-  //     };
-  //     if (currentTraining) {
-  //       fetchData();
-  //     }
-  //   }, [currentTraining, currentSeason]);
-
-  //   useEffect(() => {
-  //     if (seasons && trainings && users) {
-  //       setLoading(false);
-  //     }
-  //   }, [seasons, trainings, users]);
+  useEffect(() => {
+    if (seasons && trainings && users) {
+      setLoading(false);
+    }
+  }, [seasons, trainings, users]);
 
   useEffect(() => {
     //fetch data
@@ -154,68 +152,61 @@ const Results: FC = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.heading}>
-        <span className={styles.element}>
-          <h2>Użytkownik: </h2>
-          {/* <span className={styles.color}>{'2022/23'}</span> */}
-          {user.role === ROLE.Admin ? (
-            <Select
-              placeholder="Użytkownik"
-              defaultValue={{ label: 'Oliwer Klauze', value: 'adsf3204odsf' }}
-              options={[
-                { label: 'Jan Kowalski', value: 'asdf324' },
-                { label: 'Maksymilian Morawiecki', value: 'adfasfdasdf435345' },
-              ]}
-              changeCallback={(data) => {
-                data && navigate(`/admin/results/${data.value}`);
-              }}
-              isSearchable={true}
-              width="100%"
-            />
-          ) : (
-            <span
-              className={styles.color}
-            >{`${user?.firstName} ${user?.secondName}`}</span>
-          )}
-        </span>
-        <span className={styles.element}>
-          <h2>Sezon: </h2>
-          {/* <span className={styles.color}>{'2022/23'}</span> */}
-          <Select
-            placeholder="Sezon"
-            defaultValue={{ label: '2022/23', value: '22/23' }}
-            options={[
-              { label: '2022/23', value: '22/23' },
-              { label: '2021/22', value: '21/22' },
-              { label: '2020/21', value: '20/21' },
-            ]}
-            changeCallback={() => {}}
-            isSearchable={true}
-            width="100%"
-          />
-        </span>
-      </div>
+    <>
+      {loading ? (
+        '...'
+      ) : (
+        <div className={styles.container}>
+          <div className={styles.heading}>
+            <span className={styles.element}>
+              <h2>Użytkownik: </h2>
+              {user?.role === ROLE.Admin ? (
+                <Select
+                  placeholder="Użytkownik"
+                  defaultValue={currentUser}
+                  options={users}
+                  // changeCallback={(data) => {
+                  //   data && navigate(`/admin/results/${data.value}`);
+                  // }}
+                  changeCallback={changeUser}
+                  isSearchable={true}
+                  width="100%"
+                />
+              ) : (
+                <span
+                  className={styles.color}
+                >{`${user?.firstName} ${user?.secondName}`}</span>
+              )}
+            </span>
+            <span className={styles.element}>
+              <h2>Sezon: </h2>
+              {/* <span className={styles.color}>{'2022/23'}</span> */}
+              <Select
+                placeholder="Sezon"
+                defaultValue={currentSeason}
+                options={seasons}
+                changeCallback={changeSeason}
+                isSearchable={true}
+                width="100%"
+              />
+            </span>
+          </div>
 
-      <div className={styles.names}>
-        <span>Data</span>
-        <span>Punkty</span>
-        <span>Dziesiątki</span>
-        <span>Uwagi</span>
-      </div>
+          <div className={styles.names}>
+            <span>Data</span>
+            <span>Punkty</span>
+            <span>Dziesiątki</span>
+            <span>Uwagi</span>
+          </div>
 
-      <div className={styles.ranking}>
-        {trainings.length > 0 ? (
-          <>
+          <div className={styles.ranking}>
             {trainings.map((training) => (
               <Training {...training} />
             ))}
-          </>
-        ) : (
-          <h1>display skeleton loading</h1>
-        )}
-      </div>
-    </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

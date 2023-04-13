@@ -1,14 +1,21 @@
 import { HeaderCTA } from 'components/Header/Header';
-import Select from 'components/Select/Select';
+import Select, { SelectOption } from 'components/Select/Select';
 import React, { FC, useEffect, useState } from 'react';
 import styles from './Trainings.module.css';
+import getSeasons from 'utils/getSeasons';
+import getTrainings from 'utils/getTrainings';
+
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import pl from 'date-fns/locale/pl';
+import createTraining from 'utils/createTraining';
+registerLocale('pl', pl);
 
 interface TrainingType {
   id: String | Number;
   date: Date;
 }
 const Training: FC<TrainingType> = ({ id, date }) => {
-  const [showNote, setShowNote] = useState(false);
   return (
     <div className={styles.record}>
       <span className={styles.date}>{date.toLocaleDateString()}</span>
@@ -19,64 +26,134 @@ const Training: FC<TrainingType> = ({ id, date }) => {
 };
 
 const Trainings: FC = () => {
-  const [season, setSeason] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentSeason, setCurrentSeason] = useState<SelectOption | undefined>(
+    undefined,
+  );
 
-  const [trainings, setTrainings] = useState<TrainingType[]>([]);
+  const [seasons, setSeasons] = useState<SelectOption[] | undefined>(undefined);
+  const [trainings, setTrainings] = useState<SelectOption[] | undefined>(
+    undefined,
+  );
+  const [date, setDate] = useState(new Date());
+
+  const [isTrainingCreating, setisTrainingCreating] = useState(false);
+  const [creatingInfo, setCreatingInfo] = useState<string | null>(null);
+  const [creatingError, setCreatingError] = useState<string | null>(null);
+  const handleCreateTraining = async () => {
+    setisTrainingCreating(true);
+
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const dateLocal = `${year}-${month}-${day}`;
+
+    const data = await createTraining(dateLocal);
+    if (data.code === '200') {
+      //trening utworzony pomyślnie
+      setCreatingInfo('Utworzono pomyślnie');
+    } else {
+      //coś poszło nie tak
+      setCreatingError('Coś poszło nie tak');
+    }
+    setTimeout(() => {
+      setCreatingInfo(null);
+      setCreatingError(null);
+    }, 3000);
+    setisTrainingCreating(false);
+  };
+
+  const changeSeason = (season: SelectOption | null) => {
+    if (!season) return;
+    setCurrentSeason(season);
+  };
+
   useEffect(() => {
-    //fetch data
-    setTrainings([
-      {
-        id: '342dfasdf',
-        date: new Date(2022, 7, 14),
-      },
-      {
-        id: '342dfasdf',
-        date: new Date(2022, 6, 13),
-      },
-      {
-        id: '342dfasdf',
-        date: new Date(2022, 5, 12),
-      },
-    ]);
+    const fetchData = async () => {
+      const data = await getSeasons();
+      setSeasons(data);
+      if (data) {
+        setCurrentSeason(data[0]);
+      }
+    };
+    fetchData();
   }, []);
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.heading}>
-        <span className={styles.element}>
-          <h2>Sezon: </h2>
-          {/* <span className={styles.color}>{'2022/23'}</span> */}
-          <Select
-            placeholder="Sezon"
-            defaultValue={{ label: '2022/23', value: '22/23' }}
-            options={[
-              { label: '2022/23', value: '22/23' },
-              { label: '2021/22', value: '21/22' },
-              { label: '2020/21', value: '20/21' },
-            ]}
-            changeCallback={() => {}}
-            isSearchable={true}
-            width="100%"
-          />
-        </span>
-        <span className={styles.element}>
-          <h2>Trening: </h2>
-          <HeaderCTA text="Klinij by stworzyć" />
-        </span>
-      </div>
+  useEffect(() => {
+    const fetchData = async () => {
+      const date1 = `${String(currentSeason?.value).split('/')[0]}-09-01`;
+      const date2 = `${String(currentSeason?.value).split('/')[1]}-06-30`;
 
-      <div className={styles.ranking}>
-        {trainings.length > 0 ? (
-          <>
-            {trainings.map((training) => (
-              <Training {...training} />
+      const data = await getTrainings(date1, date2);
+      setTrainings(data);
+    };
+    if (currentSeason) {
+      fetchData();
+    }
+  }, [currentSeason, creatingInfo]);
+
+  useEffect(() => {
+    if (seasons && trainings) {
+      setLoading(false);
+    }
+  }, [seasons, trainings]);
+
+  return (
+    <>
+      {loading ? (
+        '...'
+      ) : (
+        <div className={styles.container}>
+          <div className={styles.heading}>
+            <span className={styles.element}>
+              <h2>Sezon: </h2>
+              <Select
+                placeholder="Sezon"
+                defaultValue={currentSeason}
+                options={seasons}
+                changeCallback={changeSeason}
+                isSearchable={true}
+                width="100%"
+              />
+            </span>
+            <span className={styles.element} style={{ marginTop: '1em' }}>
+              <h2>Data treningu: </h2>
+              <DatePicker
+                selected={date}
+                onChange={(date: Date) => {
+                  setDate(date);
+                }}
+                locale="pl"
+                className={styles.datepicker}
+              />
+            </span>
+            <span className={`${styles.element} ${styles.cta}`}>
+              <h2>Trening: </h2>
+              <HeaderCTA
+                text={isTrainingCreating ? '...' : 'Klinij by stworzyć'}
+                disabled={isTrainingCreating}
+                callback={handleCreateTraining}
+              />
+            </span>
+            {creatingInfo !== null && (
+              <span className={styles.info}>{creatingInfo}</span>
+            )}
+            {creatingError !== null && (
+              <span className={styles.error}>{creatingError}</span>
+            )}
+          </div>
+
+          <div className={styles.ranking}>
+            {trainings?.map((training) => (
+              <Training
+                id={String(training.value).split(';')[1]}
+                date={new Date(String(training.value).split(';')[0])}
+              />
             ))}
-          </>
-        ) : (
-          <h1>display skeleton loading</h1>
-        )}
-      </div>
-    </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

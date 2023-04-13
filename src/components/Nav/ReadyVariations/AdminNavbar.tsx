@@ -19,19 +19,19 @@ const AdminNavbar: FC = () => {
           name: 'Ranking',
           Icon: Ranking,
           callback: () => navigate('/admin/ranking'),
-          active: pathname === '/admin/ranking',
+          active: pathname.toLowerCase() === '/admin/ranking',
         },
         {
           name: 'Wyniki',
           Icon: Target,
           callback: () => navigate('/admin/results'),
-          active: pathname === '/admin/results',
+          active: pathname.toLowerCase() === '/admin/results',
         },
         {
           name: 'Treningi',
           Icon: Sport,
           callback: () => navigate('/admin/training'),
-          active: pathname === '/admin/training',
+          active: pathname.toLowerCase() === '/admin/training',
         },
       ]}
     />

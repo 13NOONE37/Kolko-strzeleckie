@@ -9,19 +9,13 @@ type TrainingData = {
   uwagi: string;
 };
 
-const getUserTrainings = async (
-  user_id: string | number,
-  start_date: string,
-  end_date: string,
-) => {
+const getUserTrainingInfo = async (training_id: string | number) => {
   try {
     const { data: response } = await axios.post<TrainingData[]>(
       import.meta.env.VITE_API,
       {
-        action: 'getusertrainings',
-        user_id: user_id,
-        start_date: start_date,
-        end_date: end_date,
+        action: 'gettraininginfo',
+        training_id: training_id,
       },
       {
         headers: {
@@ -46,4 +40,4 @@ const getUserTrainings = async (
   }
 };
 
-export default getUserTrainings;
+export default getUserTrainingInfo;

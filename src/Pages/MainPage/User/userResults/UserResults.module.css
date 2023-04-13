@@ -1,4 +1,4 @@
-.rankings {
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,9 +8,4 @@
 
   margin-top: 3em;
   margin-bottom: 100px;
-}
-@media (max-width: 1150px) {
-  .rankings {
-    flex-direction: column;
-  }
 }
