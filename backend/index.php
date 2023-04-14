@@ -426,8 +426,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         missingFieldsError();
     }
+} elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    header('Location: index.html');
 } else {
     echo json_encode(array('message' => 'Nieprawidłowa metoda żądania.', 'code' => '405'));
 }
-
 ?>
