@@ -278,14 +278,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             case 'gettraininginfo':
                 if (isAuth()) {
-                    if (isset($_POST['training_id'])) {
+                    if (isset($_POST['training_id']) && isset($_POST['user_id'])) {
                         $training_id = $_POST['training_id'];
+                        $user_id = $_POST['user_id'];
 
-                        $stmt = mysqli_prepare($conn, "SELECT uzytkownicy.id_uzytkownika, uzytkownicy.imie, uzytkownicy.nazwisko, wyniki.punkty, wyniki.dziesiatki, wyniki.uwagi
-                                    FROM uzytkownicy INNER JOIN (treningi INNER JOIN wyniki ON treningi.id_treningu = wyniki.id_treningu) ON uzytkownicy.id_uzytkownika = wyniki.id_uzytkownika
-                                    WHERE treningi.id_treningu = ?");
+                        $stmt = mysqli_prepare($conn, "SELECT wyniki.punkty, wyniki.dziesiatki, wyniki.uwagi
+                            FROM uzytkownicy INNER JOIN (treningi INNER JOIN wyniki ON treningi.id_treningu = wyniki.id_treningu) ON uzytkownicy.id_uzytkownika = wyniki.id_uzytkownika
+                            WHERE treningi.id_treningu = ? AND uzytkownicy.id_uzytkownika=?");
 
-                        mysqli_stmt_bind_param($stmt, "i", $training_id);
+                        mysqli_stmt_bind_param($stmt, "ii", $training_id, $user_id);
                         mysqli_stmt_execute($stmt);
 
                         $result = mysqli_stmt_get_result($stmt);
@@ -311,6 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     authRequiredError();
                 }
                 break;
+
 
             case 'createtraining':
                 if (isAuth() && isAdmin()) {
@@ -349,31 +351,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $tens = $_POST['tens'];
                         $note = $_POST['note'];
 
-                        $query = "SELECT * FROM `wyniki` WHERE id_treningu=? AND id_uzytkownika=?";
-                        $stmt = mysqli_prepare($conn, $query);
-                        mysqli_stmt_bind_param($stmt, "ii", $training_id, $user_id);
-                        mysqli_stmt_execute($stmt);
-                        $result = mysqli_stmt_get_result($stmt);
+                        if ($points >= 0 && $points <= 100 && $tens >= 0 && $tens <= 10) {
 
-                        if ($row = mysqli_fetch_assoc($result)) {
-                            //update
-                            $query = "UPDATE wyniki SET punkty=?, dziesiatki=?, uwagi=? WHERE id_treningu=? AND id_uzytkownika=?";
+
+                            $query = "SELECT * FROM `wyniki` WHERE id_treningu=? AND id_uzytkownika=?";
                             $stmt = mysqli_prepare($conn, $query);
-                            mysqli_stmt_bind_param($stmt, "iiisi", $points, $tens, $note, $training_id, $user_id);
-                            $res = mysqli_stmt_execute($stmt);
+                            mysqli_stmt_bind_param($stmt, "ii", $training_id, $user_id);
+                            mysqli_stmt_execute($stmt);
+                            $result = mysqli_stmt_get_result($stmt);
 
-                            echo json_encode(array('info' => $res, 'message' => 'Zaaktualizowano wyniki.', 'code' => '200'));
+                            if ($row = mysqli_fetch_assoc($result)) {
+                                //update
+                                $query = "UPDATE wyniki SET punkty=?, dziesiatki=?, uwagi='$note' WHERE id_treningu=? AND id_uzytkownika=?";
+                                $stmt = mysqli_prepare($conn, $query);
+                                mysqli_stmt_bind_param($stmt, "iisi", $points, $tens, $training_id, $user_id);
+                                $res = mysqli_stmt_execute($stmt);
 
+                                echo json_encode(array('info' => $res, 'message' => 'Zaaktualizowano wyniki.', 'code' => '200'));
+
+                            } else {
+                                //create
+                                $query = "INSERT INTO wyniki (id_treningu, id_uzytkownika, punkty, dziesiatki, uwagi) 
+                                         VALUES (?,?,?,?,?)";
+                                $stmt = mysqli_prepare($conn, $query);
+                                mysqli_stmt_bind_param($stmt, "iiiss", $training_id, $user_id, $points, $tens, $note);
+                                $res = mysqli_stmt_execute($stmt);
+
+                                echo json_encode(array('info' => $res, 'message' => 'Dodano wyniki.', 'code' => '200'));
+
+                            }
                         } else {
-                            //create
-                            $query = "INSERT INTO wyniki (id_treningu, id_uzytkownika, punkty, dziesiatki, uwagi) 
-                                     VALUES (?,?,?,?,?)";
-                            $stmt = mysqli_prepare($conn, $query);
-                            mysqli_stmt_bind_param($stmt, "iiiss", $training_id, $user_id, $points, $tens, $note);
-                            $res = mysqli_stmt_execute($stmt);
-
-                            echo json_encode(array('info' => $res, 'message' => 'Dodano wyniki.', 'code' => '200'));
-
+                            echo json_encode(array('info' => false, 'message' => 'Niepoprawna wartość punktów lub dziesiątek.', 'code' => '400'));
                         }
 
                     } else {

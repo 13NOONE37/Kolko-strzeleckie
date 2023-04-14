@@ -90,7 +90,7 @@
   padding: 1rem;
 
   display: grid;
-  grid-template-areas: 'points tens' 'note note' 'button button';
+  grid-template-areas: 'info info' 'points tens' 'note note' 'button button';
   grid-gap: 0.5rem;
 }
 .input {
@@ -109,6 +109,16 @@
 }
 .input:focus {
   border-color: var(--primary__1);
+}
+.info {
+  grid-area: info;
+  width: 100%;
+  font-size: 1.5rem;
+  color: var(--light__2);
+  font-weight: 700;
+  text-align: center;
+  height: 1.5rem;
+  margin-bottom: 1rem;
 }
 .points {
   grid-area: points;

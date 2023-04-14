@@ -200,8 +200,8 @@ const Results: FC = () => {
           </div>
 
           <div className={styles.ranking}>
-            {trainings.map((training) => (
-              <Training {...training} />
+            {trainings.map((training, index) => (
+              <Training {...training} key={index} />
             ))}
           </div>
         </div>

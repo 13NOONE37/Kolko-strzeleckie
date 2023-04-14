@@ -6,91 +6,96 @@ import getUsers from 'utils/getUsers';
 import getUserTrainingInfo from 'utils/getUserTrainingInfo';
 import updateTraining from 'utils/updateTraining';
 
-interface EditFieldsType {
-  training_id: string;
-  user_id: string;
+interface TrainingType {
+  training_id: string | number;
+  setTrainingEditing: (a: null) => void;
+}
+interface EditTrainingType {
   points: number | undefined;
   tens: number | undefined;
   note: string | undefined;
 }
+interface EditFieldsType {
+  training_id: string;
+  user_id: string;
+  currentTrainingInfo: EditTrainingType;
+  setCurrentTrainingInfo: (a: EditTrainingType) => void;
+}
 const EditFields: FC<EditFieldsType> = ({
   training_id,
   user_id,
-  points,
-  tens,
-  note,
+  currentTrainingInfo,
+  setCurrentTrainingInfo,
 }) => {
-  const [pointsLocal, setPoints] = useState(points);
-  const [tensLocal, setTens] = useState(tens);
-  const [noteLocal, setNote] = useState(note);
+  const [info, setInfo] = useState<string | null>(null);
   const handleSaveData = async () => {
     if (
-      pointsLocal === undefined ||
-      tensLocal === undefined ||
-      noteLocal === undefined
+      currentTrainingInfo.points === undefined ||
+      currentTrainingInfo.tens === undefined ||
+      currentTrainingInfo.note === undefined
     )
       return;
-    console.log(training_id, user_id, noteLocal);
     const result = await updateTraining(
       training_id,
       user_id,
-      pointsLocal,
-      tensLocal,
-      noteLocal,
+      currentTrainingInfo.points,
+      currentTrainingInfo.tens,
+      currentTrainingInfo.note,
     );
-    console.log(result);
+    console.log('Result: ', result);
+    const tempResponse = result;
+    setInfo(tempResponse.message || null);
+    setTimeout(() => setInfo(null), 3000);
   };
   return (
     <>
+      <span className={styles.info}>{info}</span>
       <input
         type="number"
         placeholder="Punkty"
-        value={pointsLocal}
+        value={currentTrainingInfo.points}
         onChange={(e) =>
-          setPoints(Math.max(0, Math.min(100, e.target.valueAsNumber)))
+          setCurrentTrainingInfo({
+            ...currentTrainingInfo,
+            points: Math.max(0, Math.min(100, e.target.valueAsNumber)),
+          })
         }
         className={`${styles.input} ${styles.points}`}
       />
       <input
         type="number"
         placeholder="Dziesiątki"
-        value={tensLocal}
+        value={currentTrainingInfo.tens}
         onChange={(e) =>
-          setTens(Math.max(0, Math.min(10, e.target.valueAsNumber)))
+          setCurrentTrainingInfo({
+            ...currentTrainingInfo,
+            tens: Math.max(0, Math.min(10, e.target.valueAsNumber)),
+          })
         }
         className={`${styles.input} ${styles.tens}`}
       />
       <textarea
         className={`${styles.input} ${styles.note}`}
         placeholder="Uwagi"
-        value={noteLocal}
-        onChange={(e) => setNote(e.target.value)}
+        value={currentTrainingInfo.note}
+        onChange={(e) =>
+          setCurrentTrainingInfo({
+            ...currentTrainingInfo,
+            note: e.target.value,
+          })
+        }
       />
       <HeaderCTA text="Zapisz" callback={handleSaveData} />
     </>
   );
 };
 
-interface TrainingType {
-  training_id: string | number;
-  setTrainingEditing: (a: null) => void;
-}
-interface EditTrainingType {
-  training_id: string;
-  user_id: string;
-  points: number;
-  tens: number;
-  note: string | undefined;
-}
 const EditTraining: FC<TrainingType> = ({
   training_id,
   setTrainingEditing,
 }) => {
   const [loading, setLoading] = useState(true);
 
-  const [trainingInfo, setTrainingInfo] = useState<
-    EditTrainingType[] | undefined
-  >(undefined);
   const [currentUser, setCurrentUser] = useState<SelectOption | undefined>(
     undefined,
   );
@@ -107,10 +112,8 @@ const EditTraining: FC<TrainingType> = ({
     let index = users?.findIndex(
       (obj) => JSON.stringify(obj) === JSON.stringify(user),
     );
-    if (typeof index === 'number' && trainingInfo) {
+    if (typeof index === 'number') {
       setCurrentUserIndex(index);
-      console.log(trainingInfo[index]);
-      setCurrentUserTrainingInfo(trainingInfo[index]);
     }
   };
   const prevIndex = () => {
@@ -144,14 +147,17 @@ const EditTraining: FC<TrainingType> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getUserTrainingInfo(training_id);
-      if (data) {
-        setTrainingInfo(data as any);
-        setCurrentUserTrainingInfo(data[0] as any);
+      const data = await getUserTrainingInfo(
+        String(training_id),
+        String(currentUser?.value),
+      );
+
+      if (data && currentUser) {
+        setCurrentUserTrainingInfo(data);
       }
     };
     fetchData();
-  }, []);
+  }, [currentUser]);
 
   return (
     <>
@@ -188,13 +194,14 @@ const EditTraining: FC<TrainingType> = ({
           </div>
 
           <div className={styles.fields}>
-            <EditFields
-              training_id={String(training_id)}
-              user_id={String(currentUser?.value)}
-              points={currentUserTrainingInfo?.points}
-              tens={currentUserTrainingInfo?.tens}
-              note={currentUserTrainingInfo?.note}
-            />
+            {currentUserTrainingInfo && (
+              <EditFields
+                training_id={String(training_id)}
+                user_id={String(currentUser?.value)}
+                currentTrainingInfo={currentUserTrainingInfo}
+                setCurrentTrainingInfo={setCurrentUserTrainingInfo}
+              />
+            )}
           </div>
         </div>
       )}

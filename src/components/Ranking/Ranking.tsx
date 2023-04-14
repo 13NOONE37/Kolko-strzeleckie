@@ -167,6 +167,7 @@ const Ranking: FC = () => {
                 {...user}
                 multiplyValues={Number(currentTraining?.label)}
                 index={index}
+                key={index}
               />
             ))}
           </div>
