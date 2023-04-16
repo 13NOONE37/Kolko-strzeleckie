@@ -80,7 +80,6 @@
 }
 .record {
   -webkit-tap-highlight-color: transparent;
-  cursor: pointer;
   position: relative;
 
   display: grid;
@@ -119,11 +118,13 @@
 /* .record:last-child {
   border-bottom: 2px solid var(--border);
 } */
-
-.record:hover {
+.adminRender .record {
+  cursor: pointer;
+}
+.adminRender .record:hover {
   color: var(--primary__2);
 }
-.record:focus {
+.adminRender .record:focus {
   /* background-color: var(--background__2); */
   border-color: var(--border);
   color: var(--primary__1);

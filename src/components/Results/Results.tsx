@@ -50,7 +50,7 @@ const Training: FC<TrainingType> = ({ date, points, tens, note }) => {
 
 const Results: FC = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id, season } = useParams();
 
   const { user } = useContext(AppContext);
 
@@ -81,7 +81,11 @@ const Results: FC = () => {
       const data = await getUsers();
       setUsers(data);
       if (data) {
-        setCurrentUser(data[0]);
+        if (id) {
+          setCurrentUser(data.find((user) => user.value === Number(id)));
+        } else {
+          setCurrentUser(data[0]);
+        }
       }
     };
     if (user?.role === ROLE.Admin) {
@@ -95,7 +99,12 @@ const Results: FC = () => {
       const data = await getSeasons();
       setSeasons(data);
       if (data) {
-        setCurrentSeason(data[0]);
+        if (season) {
+          const temp = season.replaceAll('-', '/');
+          setCurrentSeason({ label: temp, value: temp });
+        } else {
+          setCurrentSeason(data[0]);
+        }
       }
     };
     fetchData2();

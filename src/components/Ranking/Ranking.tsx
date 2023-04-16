@@ -1,15 +1,12 @@
 import Select, { SelectOption } from 'components/Select/Select';
-import React, {
-  FC,
-  useEffect,
-  useLayoutEffect,
-  useReducer,
-  useState,
-} from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import styles from './Ranking.module.css';
 import getSeasons from 'utils/getSeasons';
 import getTrainings from 'utils/getTrainings';
 import getRanking from 'utils/getRanking';
+import AppContext from 'store/AppContext';
+import { ROLE } from 'Pages/roles';
+import { useNavigate } from 'react-router';
 export interface UserType {
   id: string | number;
   firstName: string;
@@ -18,11 +15,13 @@ export interface UserType {
   tens: number;
 }
 interface RankingPlaceType extends UserType {
+  season: SelectOption | undefined;
   index: number;
   multiplyValues: number;
 }
 const RankingPlace: FC<RankingPlaceType> = ({
   id,
+  season,
   firstName,
   secondName,
   points,
@@ -30,27 +29,37 @@ const RankingPlace: FC<RankingPlaceType> = ({
   index,
   multiplyValues,
 }) => {
+  const navigate = useNavigate();
+  const { user } = useContext(AppContext);
+  const handleRedirect = () => {
+    if (user?.role === ROLE.Admin) {
+      navigate(
+        `/admin/results/${id}/${String(season?.label.replaceAll('/', '-'))}`,
+      );
+    }
+  };
   return (
-    //todo onclick redirect('/user/results/?user=adffadsf;season=asdf)
-    <div className={styles.record} tabIndex={0}>
+    // todo onclick redirect('/user/results/?user=adffadsf;season=asdf)
+    <div className={styles.record} tabIndex={0} onClick={handleRedirect}>
       <span className={styles.place}>{index + 1}</span>
       <span className={styles.name}>
         <span className={styles.secondName}>{secondName}</span>{' '}
         <span className={styles.firstName}>{firstName}</span>
       </span>
       <span className={styles.points}>
-        {points}
-        <span className={styles.maxscore}>/{100 * multiplyValues}</span>
+        {parseFloat((points / multiplyValues).toFixed(2))}
+        <span className={styles.maxscore}>/100</span>
       </span>
       <span className={styles.tens}>
-        {tens}
-        <span className={styles.maxscore}>/{10 * multiplyValues}</span>
+        {parseFloat((tens / multiplyValues).toFixed(2))}
+        <span className={styles.maxscore}>/10 </span>
       </span>
     </div>
   );
 };
 
 const Ranking: FC = () => {
+  const { user } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
   const [currentSeason, setCurrentSeason] = useState<SelectOption | undefined>(
     undefined,
@@ -129,7 +138,11 @@ const Ranking: FC = () => {
       {loading ? (
         '...'
       ) : (
-        <div className={styles.container}>
+        <div
+          className={`${styles.container} ${
+            user?.role === ROLE.Admin ? styles.adminRender : ''
+          }`}
+        >
           <div className={styles.heading}>
             <span className={styles.element}>
               <h2>Najlepsi w sezonie: </h2>
@@ -157,8 +170,8 @@ const Ranking: FC = () => {
 
           <div className={styles.names}>
             <span>Uczeń</span>
-            <span>Punkty</span>
-            <span>Dziesiątki</span>
+            <span>Śr. punktów</span>
+            <span>Śr. dziesiątek</span>
           </div>
 
           <div className={styles.ranking}>
@@ -167,6 +180,7 @@ const Ranking: FC = () => {
                 {...user}
                 multiplyValues={Number(currentTraining?.label)}
                 index={index}
+                season={currentSeason}
                 key={index}
               />
             ))}
