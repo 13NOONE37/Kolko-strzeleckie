@@ -7,6 +7,7 @@ import getRanking from 'utils/getRanking';
 import AppContext from 'store/AppContext';
 import { ROLE } from 'Pages/roles';
 import { useNavigate } from 'react-router';
+import Loader from 'components/Loader/Loader';
 export interface UserType {
   id: string | number;
   firstName: string;
@@ -67,6 +68,7 @@ const Ranking: FC = () => {
   const [currentTraining, setCurrentTraining] = useState<
     SelectOption | undefined
   >(undefined);
+  const [currentDate, setCurrentDate] = useState<SelectOption | null>(null);
   const [seasons, setSeasons] = useState<SelectOption[] | undefined>(undefined);
   const [trainings, setTrainings] = useState<SelectOption[] | undefined>(
     undefined,
@@ -79,8 +81,19 @@ const Ranking: FC = () => {
   };
   const changeTrainings = (training: SelectOption | null) => {
     if (!training) return;
+    console.log(training);
+
+    setCurrentDate(null);
 
     setCurrentTraining(training);
+  };
+  const changeDate = (date: SelectOption | null) => {
+    if (!date) return;
+    console.log(date);
+    if (trainings) {
+      setCurrentTraining(trainings[0]);
+    }
+    setCurrentDate(date);
   };
 
   useEffect(() => {
@@ -117,12 +130,24 @@ const Ranking: FC = () => {
       const date1 = String(String(currentTraining?.value).split(';')[0]);
       const date2 = `${String(currentSeason?.value).split('/')[1]}-09-01`;
 
-      const data = await getRanking(date1, date2);
-      if (data) {
-        setUsers(data);
+      //todo decydowanie jesli currentDate jest null to to
+      //todo w przeciwnym z currentDate
+      if (currentDate === null) {
+        const data = await getRanking(date1, date2);
+        if (data) {
+          setUsers(data);
+        }
+      } else {
+        const date3 = String(String(currentDate?.value).split(';')[0]);
+        console.log('ABC', date1);
+        //todo sprawdzic w postmanie czy to ma prawo dzialac
+        const data = await getRanking(date3, date3);
+        if (data) {
+          setUsers(data);
+        }
       }
     };
-    if (currentTraining) {
+    if (currentTraining || currentDate) {
       fetchData();
     }
   }, [currentTraining, currentSeason]);
@@ -136,7 +161,7 @@ const Ranking: FC = () => {
   return (
     <>
       {loading ? (
-        '...'
+        <Loader />
       ) : (
         <div
           className={`${styles.container} ${
@@ -163,6 +188,20 @@ const Ranking: FC = () => {
                 defaultValue={currentTraining}
                 options={trainings}
                 changeCallback={changeTrainings}
+                isSearchable={true}
+              />
+            </span>
+            <span className={styles.element}>
+              <h2>Konkretny trening:</h2>
+
+              <Select
+                placeholder="Konkretny trening"
+                defaultValue={currentDate}
+                options={trainings?.map((item) => {
+                  const trainingDate = String(item.value).split(';')[0];
+                  return { label: trainingDate, value: item.value };
+                })}
+                changeCallback={changeDate}
                 isSearchable={true}
               />
             </span>

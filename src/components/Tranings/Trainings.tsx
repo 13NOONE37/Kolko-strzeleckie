@@ -11,6 +11,7 @@ import pl from 'date-fns/locale/pl';
 import createTraining from 'utils/createTraining';
 import deleteTraining from 'utils/deleteTraining';
 import EditTraining from 'components/EditTraining/EditTraining';
+import Loader from 'components/Loader/Loader';
 registerLocale('pl', pl);
 
 interface TrainingType {
@@ -129,7 +130,7 @@ const Trainings: FC = () => {
   return (
     <>
       {loading ? (
-        '...'
+        <Loader />
       ) : trainingEditing === null ? (
         <div className={styles.container}>
           <div className={styles.heading}>

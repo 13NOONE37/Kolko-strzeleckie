@@ -16,7 +16,13 @@ const PrivateRoute = ({
   const { isLogged, user } = useContext(AppContext);
 
   if (isLogged === null) {
-    return <Loader />;
+    return (
+      <div
+        style={{ display: 'grid', minHeight: '100vh', placeItems: 'center' }}
+      >
+        <Loader />
+      </div>
+    );
   }
 
   // const userHasRequiredRole = user && roles.includes(user.role) ? true : false;

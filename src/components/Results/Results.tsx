@@ -8,6 +8,7 @@ import { ROLE } from 'Pages/roles';
 import getUserTrainings from 'utils/getUserTrainings';
 import getSeasons from 'utils/getSeasons';
 import getUsers from 'utils/getUsers';
+import Loader from 'components/Loader/Loader';
 
 interface TrainingType {
   date: Date;
@@ -163,7 +164,7 @@ const Results: FC = () => {
   return (
     <>
       {loading ? (
-        '...'
+        <Loader />
       ) : (
         <div className={styles.container}>
           <div className={styles.heading}>

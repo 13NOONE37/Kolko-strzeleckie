@@ -7,7 +7,7 @@ export type SelectOption = {
 };
 interface SelectProps {
   placeholder: string;
-  defaultValue?: SelectOption | undefined;
+  defaultValue?: SelectOption | undefined | null;
   changeCallback: (data: SelectOption | null) => void;
   options: SelectOption[] | undefined;
   isSearchable: boolean;

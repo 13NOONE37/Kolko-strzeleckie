@@ -5,6 +5,7 @@ import styles from './EditTraining.module.css';
 import getUsers from 'utils/getUsers';
 import getUserTrainingInfo from 'utils/getUserTrainingInfo';
 import updateTraining from 'utils/updateTraining';
+import Loader from 'components/Loader/Loader';
 
 interface TrainingType {
   training_id: string | number;
@@ -153,6 +154,7 @@ const EditTraining: FC<TrainingType> = ({
       );
 
       if (data && currentUser) {
+        console.log(data);
         setCurrentUserTrainingInfo(data);
       }
     };
@@ -162,7 +164,7 @@ const EditTraining: FC<TrainingType> = ({
   return (
     <>
       {loading ? (
-        '...'
+        <Loader />
       ) : (
         <div className={styles.container}>
           <div className={styles.heading}>
@@ -171,7 +173,7 @@ const EditTraining: FC<TrainingType> = ({
                 text="Wyjdź"
                 callback={() => {
                   if (
-                    window.confirm('Czy chcesz anulować edytowanie treningu?')
+                    window.confirm('Czy chcesz zakończyć edytowanie treningu?')
                   ) {
                     setTrainingEditing(null);
                   }
