@@ -36,11 +36,11 @@
 session_start();
 require('functions.php');
 
-$host = 'localhost';
-$username = 'root';
-$password = '';
-$database = 'apka_strzelectwo';
-$url = 'http://127.0.0.1:5500';
+$host = 'localhost'; //zmienić w zależności od ustawień bazy
+$username = 'root'; //zmienić w zależności od ustawień bazy
+$password = ''; //zmienić w zależności od ustawień bazy
+$database = 'apka_strzelectwo'; //zmienić w zależności od ustawień bazy
+$url = 'http://localhost:5173'; //zmienić w zależności od serwera
 
 $conn = mysqli_connect($host, $username, $password, $database);
 
@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     echo json_encode($data);
                 } else {
-                    echo json_encode(array('message' => 'Nie zalogowano', 'code' => '401', 'bulb' => $_COOKIE['session_id'], ));
+                    echo json_encode(array('message' => 'Nie zalogowano', 'code' => '401', ));
                 }
                 break;
 
@@ -147,13 +147,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $start_date = $_POST['start_date'];
                         $end_date = $_POST['end_date'];
 
-                        $stmt = $conn->prepare("SELECT uzytkownicy.id_uzytkownika, Sum(wyniki.punkty) AS SumOfpunkty, Sum(wyniki.dziesiatki) AS SumOfdziesiatki, uzytkownicy.imie, uzytkownicy.nazwisko
-                                                    FROM treningi 
-                                                    INNER JOIN (uzytkownicy INNER JOIN wyniki ON uzytkownicy.id_uzytkownika = wyniki.id_uzytkownika) 
-                                                    ON treningi.id_treningu = wyniki.id_treningu
-                                                    WHERE (((treningi.data_treningu) >= ? AND (treningi.data_treningu) <= ?))
-                                                    GROUP BY uzytkownicy.id_uzytkownika, uzytkownicy.imie, uzytkownicy.nazwisko
-                                                    ORDER BY SumOfpunkty DESC;");
+                        $stmt = $conn->prepare("SELECT  uzytkownicy.id_uzytkownika, 
+                                            AVG(CASE WHEN wyniki.punkty > 0 THEN wyniki.punkty END) AS AvgPunkty, 
+                                            AVG(CASE WHEN wyniki.dziesiatki > 0 THEN wyniki.dziesiatki END) AS AvgDziesiatki, 
+                                            uzytkownicy.imie, 
+                                            uzytkownicy.nazwisko
+                                        FROM 
+                                            treningi 
+                                            INNER JOIN (uzytkownicy INNER JOIN wyniki ON uzytkownicy.id_uzytkownika = wyniki.id_uzytkownika) 
+                                                ON treningi.id_treningu = wyniki.id_treningu
+                                        WHERE 
+                                            (((treningi.data_treningu) >= ? AND (treningi.data_treningu) <= ?))
+                                        GROUP BY 
+                                            uzytkownicy.id_uzytkownika, uzytkownicy.imie, uzytkownicy.nazwisko
+                                        ORDER BY 
+                                            AvgPunkty DESC;");
                         $stmt->bind_param("ss", $start_date, $end_date);
                         $stmt->execute();
                         $result = $stmt->get_result();

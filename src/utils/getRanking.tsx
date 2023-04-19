@@ -26,8 +26,8 @@ const getRanking = async (start_date: string, end_date: string) => {
           id: item.id_uzytkownika,
           firstName: item.imie,
           secondName: item.nazwisko,
-          points: item.SumOfpunkty,
-          tens: item.SumOfdziesiatki,
+          points: Number(item.AvgPunkty),
+          tens: Number(item.AvgDziesiatki),
         };
       });
     }

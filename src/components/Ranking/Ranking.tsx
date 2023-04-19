@@ -39,6 +39,7 @@ const RankingPlace: FC<RankingPlaceType> = ({
       );
     }
   };
+
   return (
     // todo onclick redirect('/user/results/?user=adffadsf;season=asdf)
     <div className={styles.record} tabIndex={0} onClick={handleRedirect}>
@@ -48,11 +49,11 @@ const RankingPlace: FC<RankingPlaceType> = ({
         <span className={styles.firstName}>{firstName}</span>
       </span>
       <span className={styles.points}>
-        {parseFloat((points / multiplyValues).toFixed(2))}
+        {parseFloat(points.toFixed(2))}
         <span className={styles.maxscore}>/100</span>
       </span>
       <span className={styles.tens}>
-        {parseFloat((tens / multiplyValues).toFixed(2))}
+        {parseFloat(tens.toFixed(2))}
         <span className={styles.maxscore}>/10 </span>
       </span>
     </div>
@@ -81,7 +82,6 @@ const Ranking: FC = () => {
   };
   const changeTrainings = (training: SelectOption | null) => {
     if (!training) return;
-    console.log(training);
 
     setCurrentDate(null);
 
@@ -89,7 +89,6 @@ const Ranking: FC = () => {
   };
   const changeDate = (date: SelectOption | null) => {
     if (!date) return;
-    console.log(date);
     if (trainings) {
       setCurrentTraining(trainings[0]);
     }
@@ -118,6 +117,7 @@ const Ranking: FC = () => {
       if (data) {
         //todo nie updatejtuje sie
         setCurrentTraining(data[0]);
+        setCurrentDate(null);
       }
     };
     if (currentSeason) {
@@ -139,7 +139,6 @@ const Ranking: FC = () => {
         }
       } else {
         const date3 = String(String(currentDate?.value).split(';')[0]);
-        console.log('ABC', date1);
         //todo sprawdzic w postmanie czy to ma prawo dzialac
         const data = await getRanking(date3, date3);
         if (data) {
@@ -150,7 +149,7 @@ const Ranking: FC = () => {
     if (currentTraining || currentDate) {
       fetchData();
     }
-  }, [currentTraining, currentSeason]);
+  }, [currentTraining, currentSeason, currentDate]);
 
   useEffect(() => {
     if (seasons && trainings && users) {

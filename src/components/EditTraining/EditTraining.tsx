@@ -154,7 +154,6 @@ const EditTraining: FC<TrainingType> = ({
       );
 
       if (data && currentUser) {
-        console.log(data);
         setCurrentUserTrainingInfo(data);
       }
     };
