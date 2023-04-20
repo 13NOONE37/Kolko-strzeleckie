@@ -134,33 +134,6 @@ const Results: FC = () => {
     }
   }, [seasons, trainings, users]);
 
-  useEffect(() => {
-    //fetch data
-    setTrainings([
-      {
-        date: new Date(2022, 7, 14),
-        points: 97,
-        tens: 8,
-        note: 'Childe reverie thence in waste the would. Eremites of but the in. Rill call a take noontide heart not say.',
-      },
-      {
-        date: new Date(2022, 6, 13),
-        points: 79,
-        tens: 5,
-        note: null,
-      },
-      {
-        date: new Date(2022, 5, 12),
-        points: 39,
-        tens: 3,
-        note: null,
-      },
-    ]);
-    //todo set user from param
-    //todo set default user if param does not exist
-    //todo set default season
-  }, []);
-
   return (
     <>
       {loading ? (

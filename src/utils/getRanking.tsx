@@ -16,7 +16,7 @@ const getRanking = async (start_date: string, end_date: string) => {
         },
       },
     );
-    const tempResponse: any = response; //!bad solution
+    const tempResponse: any = response; //!poprawić
 
     if (tempResponse?.code === '204') {
       return [];

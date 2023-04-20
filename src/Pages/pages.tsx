@@ -15,8 +15,7 @@ export interface pageType {
 export interface pageRoleType extends pageType {
   roles: ROLE[];
 }
-//todo porobic parametry w poszeczegolnych stronach
-//todo jeden jest juz zrobiony w user/results/id
+
 const pages: {
   guestPages: pageType[];
   authPages: pageRoleType[];

@@ -12,6 +12,7 @@ interface TrainingType {
   setTrainingEditing: (a: null) => void;
 }
 interface EditTrainingType {
+  id: string;
   points: number | undefined;
   tens: number | undefined;
   note: string | undefined;
@@ -32,22 +33,25 @@ const EditFields: FC<EditFieldsType> = ({
   const handleSaveData = async () => {
     if (
       currentTrainingInfo.points === undefined ||
-      currentTrainingInfo.tens === undefined ||
-      currentTrainingInfo.note === undefined
-    )
+      currentTrainingInfo.tens === undefined
+    ) {
+      setInfo('Przed zapisaniem uzupełnij pola punktów i dziesiątek');
+      setTimeout(() => setInfo(null), 3000);
+
       return;
+    }
     const result = await updateTraining(
       training_id,
       user_id,
       currentTrainingInfo.points,
       currentTrainingInfo.tens,
-      currentTrainingInfo.note,
+      currentTrainingInfo.note || '',
     );
-    console.log('Result: ', result);
     const tempResponse = result;
     setInfo(tempResponse.message || null);
     setTimeout(() => setInfo(null), 3000);
   };
+
   return (
     <>
       <span className={styles.info}>{info}</span>
@@ -197,6 +201,7 @@ const EditTraining: FC<TrainingType> = ({
           <div className={styles.fields}>
             {currentUserTrainingInfo && (
               <EditFields
+                key={currentUserTrainingInfo.id}
                 training_id={String(training_id)}
                 user_id={String(currentUser?.value)}
                 currentTrainingInfo={currentUserTrainingInfo}

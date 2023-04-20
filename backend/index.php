@@ -1,37 +1,4 @@
 <?php
-// Charakterystyka programu
-//--------------------------
-// Autorzy programu
-//----------------------------------------
-// Zespół projektowy
-// Nazwa szkoły: Zespół Szkół Ogólnokształcących i Technicznych w Kłodawie
-// Nauczyciel - opiekun grupy projektowej: Magda Malicka, Jacek Malicki
-// Uczniowie - członkowie zespołu projektowego:
-// 1.Oliwer Klauze
-// 2.Olek Szkudlarek
-// 3.Szymon Szafrański
-// 4.Szymon Siemiński
-// 5.Ola Zabłocka
-// 6.Mikołaj Wróblewski
-// 7.Kuba Gralinski
-// 8. Krzysztof Kużmiński
-// 9.Jan Dąbrowski
-// 10. Dominik Kowalski
-//----------------------------------------
-// Opis programu
-//----------------------------------------
-// Opisywanym programem jest system do zarządzania bazą danych
-// szkolnego koła strzeleckiego. Backend został oparty na bazie danych
-// MySQL. Działanie serwera zostało oparte na żądaniach POST.
-// Dzięki temu frontend aplikacji nie jest zależny od naszego
-// backendu lecz działa z nim w ścisłej współpracy jako osobna aplikacja.
-// Do skategoryzowania konkretnych działań serwera jest używany parametr
-// "action" który w zależności od podanej nazwy prowadzi do innego działania.
-// Inne dane które będą przekazywane zależne są od parametru "action".
-// Niektóre z działań dostępne są tylko dla administratorów.
-//----------------------------------------
-
-
 
 session_start();
 require('functions.php');

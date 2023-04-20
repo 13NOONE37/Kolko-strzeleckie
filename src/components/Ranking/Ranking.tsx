@@ -41,7 +41,6 @@ const RankingPlace: FC<RankingPlaceType> = ({
   };
 
   return (
-    // todo onclick redirect('/user/results/?user=adffadsf;season=asdf)
     <div className={styles.record} tabIndex={0} onClick={handleRedirect}>
       <span className={styles.place}>{index + 1}</span>
       <span className={styles.name}>
@@ -115,7 +114,6 @@ const Ranking: FC = () => {
       const data = await getTrainings(date1, date2);
       setTrainings(data);
       if (data) {
-        //todo nie updatejtuje sie
         setCurrentTraining(data[0]);
         setCurrentDate(null);
       }
@@ -130,8 +128,6 @@ const Ranking: FC = () => {
       const date1 = String(String(currentTraining?.value).split(';')[0]);
       const date2 = `${String(currentSeason?.value).split('/')[1]}-09-01`;
 
-      //todo decydowanie jesli currentDate jest null to to
-      //todo w przeciwnym z currentDate
       if (currentDate === null) {
         const data = await getRanking(date1, date2);
         if (data) {
@@ -139,7 +135,6 @@ const Ranking: FC = () => {
         }
       } else {
         const date3 = String(String(currentDate?.value).split(';')[0]);
-        //todo sprawdzic w postmanie czy to ma prawo dzialac
         const data = await getRanking(date3, date3);
         if (data) {
           setUsers(data);
