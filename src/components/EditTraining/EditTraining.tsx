@@ -35,7 +35,7 @@ const EditFields: FC<EditFieldsType> = ({
       currentTrainingInfo.points === undefined ||
       currentTrainingInfo.tens === undefined
     ) {
-      setInfo('Przed zapisaniem uzupełnij pola punktów i dziesiątek');
+      setInfo('Uzupełnij pola punktów i dziesiątek');
       setTimeout(() => setInfo(null), 3000);
 
       return;

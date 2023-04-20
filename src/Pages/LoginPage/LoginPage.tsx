@@ -22,15 +22,11 @@ const LoginPage: FC = () => {
         <section className={styles['login--container']}>
           <h1>Zaloguj się</h1>
           <Formik
-            initialValues={{ email: '', password: '' }}
+            initialValues={{ username: '', password: '' }}
             validate={(values) => {
-              const errors: { email?: string; password?: string } = {};
-              if (!values.email) {
-                errors.email = 'Pole jest wymagane';
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-              ) {
-                errors.email = 'Adres email nie jest poprawny';
+              const errors: { username?: string; password?: string } = {};
+              if (!values.username) {
+                errors.username = 'Pole jest wymagane';
               }
               if (!values.password) {
                 errors.password = 'Pole jest wymagane';
@@ -43,7 +39,7 @@ const LoginPage: FC = () => {
                   import.meta.env.VITE_API,
                   {
                     action: 'auth',
-                    email: values.email,
+                    email: values.username,
                     password: values.password,
                   },
                   {
@@ -60,12 +56,13 @@ const LoginPage: FC = () => {
                       role: response.data.czyAdmin ? ROLE.Admin : ROLE.User,
                       firstName: response.data.imie,
                       secondName: response.data.nazwisko,
-                      email: response.data.email,
+                      email: response.data.username,
                       id: response.data.id_uzytkownika,
                     });
                   } else {
+                    console.log(response);
                     //not logged
-                    setGlobalError('Błędny email lub hasło');
+                    setGlobalError('Błędna nazwa użytkownika lub hasło');
                   }
                   setSubmitting(false);
                 })
@@ -87,15 +84,15 @@ const LoginPage: FC = () => {
             }) => (
               <form onSubmit={handleSubmit}>
                 <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
+                  type="text"
+                  name="username"
+                  placeholder="Nazwa użytkownika"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.email}
+                  value={values.username}
                 />
                 <span className={styles.error}>
-                  {errors.email && touched.email && errors.email}
+                  {errors.username && touched.username && errors.username}
                 </span>
                 <input
                   type="password"

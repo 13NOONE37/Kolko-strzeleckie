@@ -97,8 +97,15 @@ const Ranking: FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getSeasons();
+
       setSeasons(data);
       if (data) {
+        if (data.length === 0) {
+          setTrainings([]);
+          setUsers([]);
+
+          return;
+        }
         setCurrentSeason(data[0]);
         setCurrentTraining(undefined);
       }

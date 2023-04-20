@@ -28,6 +28,11 @@ const getSeasons = async () => {
     );
     const years: number[] = [];
     const ranges: SelectOption[] = [];
+    const tempResponse: any = response;
+    if (tempResponse.code === '204') {
+      return [];
+    }
+
     const data = response.sort(
       (a, b) => +new Date(a.data_treningu) - +new Date(b.data_treningu),
     );

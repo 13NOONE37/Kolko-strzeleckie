@@ -28,6 +28,8 @@ const Training: FC<TrainingType> = ({
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDelete = async () => {
+    setCreatingInfo(null);
+
     setIsDeleting(true);
     if (
       window.confirm(
@@ -102,6 +104,11 @@ const Trainings: FC = () => {
       const data = await getSeasons();
       setSeasons(data);
       if (data) {
+        if (data.length === 0) {
+          setTrainings([]);
+
+          return;
+        }
         setCurrentSeason(data[0]);
       }
     };
@@ -113,6 +120,7 @@ const Trainings: FC = () => {
       const date2 = `${String(currentSeason?.value).split('/')[1]}-06-30`;
 
       const data = await getTrainings(date1, date2);
+
       setTrainings(data);
     };
     if (currentSeason) {
