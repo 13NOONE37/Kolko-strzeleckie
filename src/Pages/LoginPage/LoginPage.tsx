@@ -60,14 +60,12 @@ const LoginPage: FC = () => {
                       id: response.data.id_uzytkownika,
                     });
                   } else {
-                    console.log(response);
                     //not logged
                     setGlobalError('Błędna nazwa użytkownika lub hasło');
                   }
                   setSubmitting(false);
                 })
                 .catch((error: any) => {
-                  console.log(error);
                   setSubmitting(false);
                 });
             }}

@@ -20,7 +20,6 @@ const useSession = (
         );
         if (response.code === '200') {
           //logged
-          console.log('logged');
 
           setIsLogged(true);
           setUser({
@@ -32,7 +31,6 @@ const useSession = (
           });
         } else {
           //not logged
-          console.log('not logged');
           setIsLogged(false);
           setUser(null);
         }

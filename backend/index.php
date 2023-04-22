@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $email = $_POST['email'];
                     $password = $_POST['password'];
 
-                    $stmt = $conn->prepare("SELECT * FROM uzytkownicy WHERE email=?");
+                    $stmt = $conn->prepare("SELECT * FROM uzytkownicy WHERE nazwa=?");
                     $stmt->bind_param("s", $email);
                     $stmt->execute();
                     $result = $stmt->get_result();
@@ -58,24 +58,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $_SESSION['id_uzytkownika'] = $row['id_uzytkownika'];
                             $_SESSION['imie'] = $row['imie'];
                             $_SESSION['nazwisko'] = $row['nazwisko'];
-                            $_SESSION['email'] = $row['email'];
+                            $_SESSION['email'] = $row['nazwa'];
                             $_SESSION['czyAdmin'] = $row['czyAdmin'];
 
                             $data = new stdClass();
                             $data->id_uzytkownika = $row['id_uzytkownika'];
                             $data->imie = $row['imie'];
                             $data->nazwisko = $row['nazwisko'];
-                            $data->email = $row['email'];
+                            $data->email = $row['nazwa'];
                             $data->czyAdmin = $row['czyAdmin'];
                             $data->code = '200';
 
 
                             echo json_encode($data);
                         } else {
-                            echo json_encode(array('message' => 'Błędny email lub hasło', 'code' => '401'));
+                            echo json_encode(array('message' => 'Błędna nazwa lub hasło', 'code' => '401'));
                         }
                     } else {
-                        echo json_encode(array('message' => 'Błędny email lub hasło', 'code' => '401'));
+                        echo json_encode(array('message' => 'Błędna nazwa lub hasło', 'code' => '401'));
                     }
                 } else {
                     echo json_encode(array('message' => 'Żądanie jest niekompletne.', 'code' => '400'));
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $data->id_uzytkownika = $_SESSION['id_uzytkownika'];
                     $data->imie = $_SESSION['imie'];
                     $data->nazwisko = $_SESSION['nazwisko'];
-                    $data->email = $_SESSION['email'];
+                    $data->email = $_SESSION['nazwa'];
                     $data->czyAdmin = $_SESSION['czyAdmin'];
                     $data->code = '200';
 
@@ -401,7 +401,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         missingFieldsError();
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    header('Location: index.html');
+    header('Location: main.html');
 } else {
     echo json_encode(array('message' => 'Nieprawidłowa metoda żądania.', 'code' => '405'));
 }
