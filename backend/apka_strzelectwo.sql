@@ -39,10 +39,10 @@ CREATE TABLE `treningi` (
 --
 
 CREATE TABLE `uzytkownicy` (
-  `id` int(11) NOT NULL,
+  `id_uzytkownika` int(11) NOT NULL,
   `imie` text COLLATE utf8_polish_ci NOT NULL,
   `nazwisko` text COLLATE utf8_polish_ci NOT NULL,
-  `email` text COLLATE utf8_polish_ci NOT NULL,
+  `nazwa` text COLLATE utf8_polish_ci NOT NULL,
   `haslo` text COLLATE utf8_polish_ci NOT NULL,
   `czyAdmin` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
