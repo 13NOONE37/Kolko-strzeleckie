@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 05 Kwi 2023, 09:37
--- Wersja serwera: 10.4.14-MariaDB
--- Wersja PHP: 7.2.34
+-- Generation Time: Apr 22, 2023 at 11:40 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Baza danych: `apka_strzelectwo`
+-- Database: `apka_strzelectwo`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `treningi`
+-- Table structure for table `treningi`
 --
 
 CREATE TABLE `treningi` (
@@ -35,22 +35,24 @@ CREATE TABLE `treningi` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `uzytkownicy`
+-- Table structure for table `uzytkownicy`
 --
 
 CREATE TABLE `uzytkownicy` (
   `id_uzytkownika` int(11) NOT NULL,
-  `imie` text COLLATE utf8_polish_ci NOT NULL,
-  `nazwisko` text COLLATE utf8_polish_ci NOT NULL,
-  `nazwa` text COLLATE utf8_polish_ci NOT NULL,
-  `haslo` text COLLATE utf8_polish_ci NOT NULL,
+  `imie` text NOT NULL,
+  `nazwisko` text NOT NULL,
+  `nazwa` text NOT NULL,
+  `haslo` text NOT NULL,
   `czyAdmin` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `wyniki`
+-- Table structure for table `wyniki`
 --
 
 CREATE TABLE `wyniki` (
@@ -58,40 +60,58 @@ CREATE TABLE `wyniki` (
   `id_uzytkownika` int(11) NOT NULL,
   `punkty` int(11) NOT NULL,
   `dziesiatki` int(11) NOT NULL,
-  `uwagi` text COLLATE utf8_polish_ci NOT NULL
+  `uwagi` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 --
--- Indeksy dla zrzutów tabel
+-- Indexes for dumped tables
 --
 
 --
--- Indeksy dla tabeli `treningi`
+-- Indexes for table `treningi`
 --
 ALTER TABLE `treningi`
   ADD PRIMARY KEY (`id_treningu`);
 
 --
--- Indeksy dla tabeli `uzytkownicy`
+-- Indexes for table `uzytkownicy`
 --
 ALTER TABLE `uzytkownicy`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id_uzytkownika`);
 
 --
--- AUTO_INCREMENT dla zrzuconych tabel
+-- Indexes for table `wyniki`
+--
+ALTER TABLE `wyniki`
+  ADD KEY `id_treningu` (`id_treningu`),
+  ADD KEY `id_uzytkownika` (`id_uzytkownika`);
+
+--
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT dla tabeli `treningi`
+-- AUTO_INCREMENT for table `treningi`
 --
 ALTER TABLE `treningi`
   MODIFY `id_treningu` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT dla tabeli `uzytkownicy`
+-- AUTO_INCREMENT for table `uzytkownicy`
 --
 ALTER TABLE `uzytkownicy`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_uzytkownika` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `wyniki`
+--
+ALTER TABLE `wyniki`
+  ADD CONSTRAINT `wyniki_ibfk_1` FOREIGN KEY (`id_treningu`) REFERENCES `treningi` (`id_treningu`),
+  ADD CONSTRAINT `wyniki_ibfk_2` FOREIGN KEY (`id_uzytkownika`) REFERENCES `uzytkownicy` (`id_uzytkownika`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

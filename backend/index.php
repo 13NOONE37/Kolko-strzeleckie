@@ -9,6 +9,7 @@ $database = 'apka_strzelectwo'; //zmienić w zależności od ustawień bazy
 $url = 'http://localhost:5173'; //zmienić w zależności od serwera
 
 $conn = mysqli_connect($host, $username, $password, $database);
+mysqli_set_charset($conn, 'utf8');
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
