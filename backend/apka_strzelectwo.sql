@@ -102,16 +102,7 @@ ALTER TABLE `treningi`
 ALTER TABLE `uzytkownicy`
   MODIFY `id_uzytkownika` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
---
--- Constraints for dumped tables
---
 
---
--- Constraints for table `wyniki`
---
-ALTER TABLE `wyniki`
-  ADD CONSTRAINT `wyniki_ibfk_1` FOREIGN KEY (`id_treningu`) REFERENCES `treningi` (`id_treningu`),
-  ADD CONSTRAINT `wyniki_ibfk_2` FOREIGN KEY (`id_uzytkownika`) REFERENCES `uzytkownicy` (`id_uzytkownika`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
